@@ -9,45 +9,41 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
-public class Hallway extends Actor {
+public class Footstep extends Actor {
 	TextureRegion region;
 	private ShapeRenderer renderer = new ShapeRenderer();
-	private Texture texture;
-    public Sprite sprite;
+	private Texture shoeTexture;
+    public Sprite shoeSprite;
     
-    //Wall Sprites
-    
-	public Hallway() {
+	public Footstep() {
         region = new TextureRegion();
-        System.out.println("Hello from Hallway");
+        System.out.println("Hello from Footstep");
         
-        texture = new Texture(Gdx.files.internal("perspective.png"));
-        sprite = new Sprite(texture);
+        shoeTexture = new Texture(Gdx.files.internal("shoePrintPerspective.png"));
+        shoeSprite = new Sprite(shoeTexture);
+        
+        
         
     }
 
     @Override
     public void draw (Batch batch, float parentAlpha) {
+    	batch.begin();
+    	shoeSprite.draw(batch);
     	batch.end();
-    	System.out.println("Rendering Hallway");
-    	
     	
 //    	
-    	
-    	batch.begin();
-    	sprite.draw(batch);
-    	
-        renderer.setProjectionMatrix(batch.getProjectionMatrix());
-        renderer.setTransformMatrix(batch.getTransformMatrix());
-        renderer.translate(getX(), getY(), 0);
-
-        renderer.begin(ShapeRenderer.ShapeType.Filled);
-        renderer.setColor(Color.BLUE);
-        renderer.rect(0, 0, getWidth(), getHeight());
-        renderer.end();
-
-        batch.end();
-        batch.begin();
+//        renderer.setProjectionMatrix(batch.getProjectionMatrix());
+//        renderer.setTransformMatrix(batch.getTransformMatrix());
+//        renderer.translate(getX(), getY(), 0);
+//
+//        renderer.begin(ShapeRenderer.ShapeType.Filled);
+//        renderer.setColor(Color.BLUE);
+//        renderer.rect(0, 0, getWidth(), getHeight());
+//        renderer.end();
+//
+//        batch.end();
+//        batch.begin();
     	 
     	//Draw the hallway frame
 //    	renderer.begin(ShapeRenderer.ShapeType.Line);

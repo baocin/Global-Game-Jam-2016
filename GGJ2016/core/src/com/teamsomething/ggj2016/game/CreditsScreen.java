@@ -2,9 +2,9 @@ package com.teamsomething.ggj2016.game;
 
 import com.badlogic.gdx.Screen;
 
-public class CreditScreen implements Screen {
+public class CreditsScreen implements Screen {
 
-	public CreditScreen() {
+	public CreditsScreen() {
 		// TODO Auto-generated constructor stub
 	}
 
