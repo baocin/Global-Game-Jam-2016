@@ -1,4 +1,4 @@
-package com.mygdx.game;
+package com.teamsomething.ggj2016.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
