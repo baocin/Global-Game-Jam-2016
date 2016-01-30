@@ -16,15 +16,16 @@ public class Level {
 	private double currPos;
 
 	/**
-	 * List of segments comprising level
+	 * List of footsteps in level
 	 */
-	private LinkedList<LevelSegment> segments = new LinkedList<LevelSegment>();
+	private LinkedList<Footstep> footsteps = new LinkedList<Footstep>();
 
 	private enum LoadState {
 		NONE, ORDER, SEGMENT_FILENAME, SEGMENT_MOVES
 	}
 
 	private static final String LOAD_LEVEL_TAG = "Level.loadLevel";
+
 	/**
 	 * Reads a theme file, and generates a level from it by combining segments.
 	 * 
@@ -32,15 +33,16 @@ public class Level {
 	 * @return
 	 */
 	public static Level loadLevel(String themeFilename) {
-	
-		Gdx.app.debug(LOAD_LEVEL_TAG, "Loading theme: "+themeFilename);
-		
+
+		Gdx.app.debug(LOAD_LEVEL_TAG, "Loading theme: " + themeFilename);
+
 		// Load plaintext theme file
 		BufferedReader themeIn = Gdx.files.getFileHandle(themeFilename, FileType.Internal).reader(2048);
 
 		LinkedList<LinkedList<Integer>> segmentOrder = new LinkedList<LinkedList<Integer>>();
 		LinkedList<String> segmentMusicFilenames = new LinkedList<String>();
 		LinkedList<LinkedList<String>> segmentFootsteps = new LinkedList<LinkedList<String>>();
+		LinkedList<Double> segmentMusicDurations = new LinkedList<Double>();
 
 		try {
 			// Load segments of plaintext theme file
@@ -55,7 +57,7 @@ public class Level {
 				}
 				// Load a section of the theme file
 				String sectionTitle = lineIn.trim();
-				Gdx.app.debug(LOAD_LEVEL_TAG, "Loading section with title: "+sectionTitle);
+				Gdx.app.debug(LOAD_LEVEL_TAG, "Loading section with title: " + sectionTitle);
 				if (sectionTitle.equalsIgnoreCase("Segment Order:")) {
 					// Segment order section
 					Gdx.app.debug(LOAD_LEVEL_TAG, "Loading segment order section.");
@@ -65,9 +67,9 @@ public class Level {
 						if (lineIn == null) {
 							break;
 						}
-						
+
 						if (Character.isDigit(lineIn.trim().charAt(0))) {
-							Gdx.app.debug(LOAD_LEVEL_TAG, "Loading segment order line: "+lineIn);
+							Gdx.app.debug(LOAD_LEVEL_TAG, "Loading segment order line: " + lineIn);
 							String[] parts = lineIn.split(",");
 							LinkedList<Integer> ll = new LinkedList<Integer>();
 							for (String s : parts) {
@@ -82,15 +84,18 @@ public class Level {
 					// } else if
 					// (sectionTitle.toLowerCase().matches("Segment\\s*\\d+.*"))
 					// {
-				} else if (sectionTitle.toLowerCase().trim().matches("segment\\w\\d+\\.")) {
+				} else if (sectionTitle.equalsIgnoreCase("Segment:")) {
 					// Segment section
 					Gdx.app.debug(LOAD_LEVEL_TAG, "Loading segment section.");
-					// TODO: Load music filename
-					String musicFilename = lineIn = themeIn.readLine();
+					// Load music duration
+					double musicDuration = Double.parseDouble(themeIn.readLine());
+					segmentMusicDurations.add(musicDuration);
+					// Load music filename
+					String musicFilename = themeIn.readLine();
 					segmentMusicFilenames.add(musicFilename);
-					Gdx.app.debug(LOAD_LEVEL_TAG, "Segment file name: "+musicFilename);
+					Gdx.app.debug(LOAD_LEVEL_TAG, "Segment file name: " + musicFilename);
 
-					// TODO: Load footsteps
+					// Load footsteps
 					LinkedList<String> footsteps = new LinkedList<String>();
 					do {
 						lineIn = themeIn.readLine();
@@ -104,10 +109,10 @@ public class Level {
 						}
 					} while (true);
 					segmentFootsteps.add(footsteps);
-					Gdx.app.debug(LOAD_LEVEL_TAG, "Loaded segment foosteps: "+segmentFootsteps.toString());
+					Gdx.app.debug(LOAD_LEVEL_TAG, "Loaded segment foosteps: " + segmentFootsteps.toString());
 				} else {
 					// INVALID SECTION TITLE
-					Gdx.app.error(LOAD_LEVEL_TAG, "Invalid section title in Theme file: "+lineIn);
+					Gdx.app.error(LOAD_LEVEL_TAG, "Invalid section title in Theme file: " + lineIn);
 					break;
 				}
 			}
@@ -115,24 +120,47 @@ public class Level {
 			e.printStackTrace();
 			return null;
 		}
-		
+
 		System.out.println(segmentOrder);
 		System.out.println(segmentMusicFilenames);
+		System.out.println(segmentMusicDurations);
 		System.out.println(segmentFootsteps);
-		
+
 		Gdx.app.debug(LOAD_LEVEL_TAG, "Generating level:");
 
 		// Choose a set of segments randomly according to the segment order
 		LinkedList<Integer> chosenSegments = new LinkedList<Integer>();
-		for (LinkedList<Integer> options:segmentOrder) {
-			chosenSegments.add(options.get(MathUtils.random(options.size()-1)));
+		for (LinkedList<Integer> options : segmentOrder) {
+			chosenSegments.add(options.get(MathUtils.random(options.size() - 1)) - 1);
 		}
-		
-		Gdx.app.debug(LOAD_LEVEL_TAG, "Selected segment order:" + chosenSegments.toString());
-		
-		// TODO: Create level object
 
-		return null;
+		Gdx.app.debug(LOAD_LEVEL_TAG, "Selected segment order:" + chosenSegments.toString());
+
+		Level level = new Level();
+		// Place foosteps according to position in each segment
+		double startTime = 0;
+		for (Integer chosenSegmentIndex : chosenSegments) {
+			// Calculate the time interval between each footstep
+			double interval = segmentMusicDurations.get(chosenSegmentIndex)
+					/ segmentFootsteps.get(chosenSegmentIndex).size();
+			for (int i = 0; i < segmentFootsteps.get(chosenSegmentIndex).size(); i++) {
+				String typeString = segmentFootsteps.get(chosenSegmentIndex).get(i);
+				if (typeString.length() > 0) {
+					FootstepType type = FootstepType.LEFT;
+					if (typeString.toLowerCase().startsWith("r")) {
+						type = FootstepType.RIGHT;
+					}
+					// Place new footstep on level's timeline
+					level.footsteps.add(new Footstep(type, startTime + i * interval));
+				}
+			}
+
+			startTime += segmentMusicDurations.get(chosenSegmentIndex);
+		}
+
+		Gdx.app.debug(LOAD_LEVEL_TAG, level.footsteps.toString());
+
+		return level;
 	}
 
 }
