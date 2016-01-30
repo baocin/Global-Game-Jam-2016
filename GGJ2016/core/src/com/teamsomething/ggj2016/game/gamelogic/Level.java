@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.LinkedList;
 
 import com.badlogic.gdx.Files.FileType;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Logger;
@@ -19,6 +20,13 @@ public class Level {
 	 * List of footsteps in level
 	 */
 	private LinkedList<Footstep> footsteps = new LinkedList<Footstep>();
+
+	/**
+	 * List of music files in a level
+	 * 
+	 *
+	 */
+	private LinkedList<String> musicFiles = new LinkedList<String>();
 
 	private enum LoadState {
 		NONE, ORDER, SEGMENT_FILENAME, SEGMENT_MOVES
@@ -159,6 +167,11 @@ public class Level {
 		}
 
 		Gdx.app.debug(LOAD_LEVEL_TAG, level.footsteps.toString());
+
+		// Queue up music files according to segment order
+		for (Integer segment : chosenSegments) {
+			level.musicFiles.add(segmentMusicFilenames.get(segment - 1));
+		}
 
 		return level;
 	}
