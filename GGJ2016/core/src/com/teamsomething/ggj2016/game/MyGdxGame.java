@@ -5,6 +5,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.utils.Logger;
+import com.teamsomething.ggj2016.game.gamelogic.Level;
 
 public class MyGdxGame extends ApplicationAdapter {
 	SpriteBatch batch;
@@ -14,6 +16,9 @@ public class MyGdxGame extends ApplicationAdapter {
 	public void create () {
 		batch = new SpriteBatch();
 		img = new Texture("badlogic.jpg");
+		
+		Gdx.app.setLogLevel(Logger.DEBUG);
+		Level.loadLevel("themeTest1.txt");
 	}
 
 	@Override
