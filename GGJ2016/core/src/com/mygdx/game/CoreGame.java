@@ -10,6 +10,9 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.badlogic.gdx.utils.viewport.StretchViewport;
 
 public class CoreGame extends ApplicationAdapter {
 	private static final int PREFFERED_WIDTH = 1240;
@@ -21,9 +24,14 @@ public class CoreGame extends ApplicationAdapter {
     private GameScreen gameScreen;
     private PauseScreen pauseScreen;
     private TitleScreen titleScreen;
+    private Stage stage;
     
     @Override
     public void create() {
+    	stage = new Stage(new StretchViewport(PREFFERED_WIDTH, PREFFERED_HEIGHT));
+        Gdx.input.setInputProcessor(stage);
+        
+        
     	creditScreen = new CreditScreen();
     	gameScreen= new GameScreen();
     	pauseScreen = new PauseScreen();
@@ -43,6 +51,10 @@ public class CoreGame extends ApplicationAdapter {
 
     @Override
     public void render() {
+    	Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        stage.act();
+        stage.draw();
+        
     	if(Gdx.input.isKeyPressed(Input.Keys.UP)){
     		sprite.translateY(10.0f);
         }
@@ -60,7 +72,7 @@ public class CoreGame extends ApplicationAdapter {
 
     @Override
     public void resize(int width, int height) {
-    	
+    	stage.getViewport().update(width, height, true);
 //    	stage.setViewport(PREFFERED_WIDTH, PREFFERED_HEIGHT, true);
 //        stage.getCamera().translate(-stage.getGutterWidth(), -stage.getGutterHeight(), 0);
 //        if (table != null){
