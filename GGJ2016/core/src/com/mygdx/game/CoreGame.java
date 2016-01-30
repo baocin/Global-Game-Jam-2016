@@ -12,6 +12,8 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class CoreGame extends ApplicationAdapter {
+	private static final int PREFFERED_WIDTH = 1240;
+	private static final int PREFFERED_HEIGHT = 800;
 	private SpriteBatch batch;
     private Texture texture;
     private Sprite sprite;
@@ -26,6 +28,7 @@ public class CoreGame extends ApplicationAdapter {
     	gameScreen= new GameScreen();
     	pauseScreen = new PauseScreen();
     	titleScreen = new TitleScreen();
+    	
     	
         batch = new SpriteBatch();
         texture = new Texture(Gdx.files.internal("perspective.png"));
@@ -57,6 +60,12 @@ public class CoreGame extends ApplicationAdapter {
 
     @Override
     public void resize(int width, int height) {
+    	
+//    	stage.setViewport(PREFFERED_WIDTH, PREFFERED_HEIGHT, true);
+//        stage.getCamera().translate(-stage.getGutterWidth(), -stage.getGutterHeight(), 0);
+//        if (table != null){
+//            table.setSize(PREFFERED_WIDTH, PREFFERED_HEIGHT);
+//        }
     }
 
     @Override
