@@ -13,7 +13,7 @@ allprojects {
 
     version = '1.0'
     ext {
-        appName = "GGJ2016"
+        appName = "my-gdx-game"
         gdxVersion = '1.9.1'
         roboVMVersion = '1.12.0'
         box2DLightsVersion = '1.4'
@@ -42,6 +42,7 @@ project(":desktop") {
         compile "com.badlogicgames.gdx:gdx-tools:$gdxVersion"
         compile "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-desktop"
         compile "com.badlogicgames.gdx:gdx-bullet-platform:$gdxVersion:natives-desktop"
+        compile "de.tomgrill.gdxdialogs:gdx-dialogs-desktop:1.0.0"
     }
 }
 
@@ -53,11 +54,14 @@ project(":core") {
         compile "com.badlogicgames.gdx:gdx:$gdxVersion"
         compile "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
         compile "com.badlogicgames.gdx:gdx-controllers:$gdxVersion"
+        compile "com.badlogicgames.gdx:gdx-ai:$aiVersion"
+        compile "com.badlogicgames.ashley:ashley:$ashleyVersion"
         compile "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
         compile "com.badlogicgames.gdx:gdx-bullet:$gdxVersion"
         compile "com.badlogicgames.box2dlights:box2dlights:$box2DLightsVersion"
-        compile "com.badlogicgames.ashley:ashley:$ashleyVersion"
-        compile "com.badlogicgames.gdx:gdx-ai:$aiVersion"
+        compile "net.dermetfan.libgdx-utils:libgdx-utils:0.13.2"
+        compile "net.dermetfan.libgdx-utils:libgdx-utils-box2d:0.13.2"
+        compile "de.tomgrill.gdxdialogs:gdx-dialogs-core:1.0.0"
     }
 }
 
