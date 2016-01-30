@@ -1,4 +1,4 @@
-package com.mygdx.game;
+package com.teamsomething.ggj2016.game;
 
 import java.util.HashMap;
 
