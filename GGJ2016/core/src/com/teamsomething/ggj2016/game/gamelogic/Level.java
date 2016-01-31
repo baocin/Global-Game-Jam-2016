@@ -290,4 +290,34 @@ public class Level {
 		this.segmentMusicDurations = segmentMusicDurations;
 	}
 
+	public int getMisses() {
+		int misses = 0;
+		for (Footstep f : footsteps) {
+			if (f.isDidMiss()) {
+				misses++;
+			}
+		}
+		return misses;
+	}
+
+	public int getHits() {
+		int hits = 0;
+		for (Footstep f : footsteps) {
+			if (f.isDidHit()) {
+				hits++;
+			}
+		}
+		return hits;
+	}
+
+	public int getSkipped() {
+		int skipped = 0;
+		for (Footstep f : getFootstepsBetween(0, currPos - 1)) {
+			if (!f.isDidHit() && !f.isDidMiss()) {
+				skipped++;
+			}
+		}
+		return skipped;
+	}
+
 }
