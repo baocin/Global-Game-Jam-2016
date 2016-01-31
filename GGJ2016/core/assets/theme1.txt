@@ -26,7 +26,7 @@ r
 
 Segment:
 16.75
-rythm2Lvl1.wav
+rythm2Lvl1.ogg
 l
 
 r
@@ -45,7 +45,7 @@ l
 r
 Segment:
 16.75
-rythm3Lvl1.wav
+rythm3Lvl1.ogg
 l 
 
 r
@@ -64,7 +64,7 @@ l
 
 Segment:
 16.75
-rythm4Lvl1.wav
+rythm4Lvl1.ogg
 l 
 
 r

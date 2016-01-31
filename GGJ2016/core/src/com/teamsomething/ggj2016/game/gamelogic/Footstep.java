@@ -16,6 +16,7 @@ public class Footstep implements Comparable<Footstep> {
 	private FootstepType type;
 	private double time;
 	private boolean didMiss = false;
+	private boolean didHit = false;
 
 	public FootstepType getType() {
 		return type;
@@ -50,11 +51,19 @@ public class Footstep implements Comparable<Footstep> {
 	@Override
 	public int compareTo(Footstep o) {
 		if (o.time < time) {
-			return -1;
-		} else if (o.time > time) {
 			return 1;
+		} else if (o.time > time) {
+			return -1;
 		} else {
 			return 0;
 		}
+	}
+
+	public boolean isDidHit() {
+		return didHit;
+	}
+
+	public void setDidHit(boolean didHit) {
+		this.didHit = didHit;
 	}
 }

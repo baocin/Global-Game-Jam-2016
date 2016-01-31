@@ -128,10 +128,10 @@ public class Level {
 			return null;
 		}
 
-		System.out.println(segmentOrder);
-		System.out.println(segmentMusicFilenames);
-		System.out.println(segmentMusicDurations);
-		System.out.println(segmentFootsteps);
+		Gdx.app.debug(LOAD_LEVEL_TAG, segmentOrder.toString());
+		Gdx.app.debug(LOAD_LEVEL_TAG, segmentMusicFilenames.toString());
+		Gdx.app.debug(LOAD_LEVEL_TAG, segmentMusicDurations.toString());
+		Gdx.app.debug(LOAD_LEVEL_TAG, segmentFootsteps.toString());
 
 		Gdx.app.debug(LOAD_LEVEL_TAG, "Generating level:");
 
@@ -189,6 +189,10 @@ public class Level {
 		this.currPos = currPos;
 	}
 
+	public void addCurrPos(double addAmount) {
+		this.currPos += addAmount;
+	}
+
 	public LinkedList<Footstep> getFootsteps() {
 		return footsteps;
 	}
@@ -204,5 +208,22 @@ public class Level {
 	public void setMusicFiles(LinkedList<String> musicFiles) {
 		this.musicFiles = musicFiles;
 	}
+
+	/**
+	 * Returns the first footstep within "threshold" seconds of the current
+	 * position
+	 * 
+	 * @param threshold
+	 * @return
+	 */
+	public Footstep getActiveFootstep(double threshold) {
+		for (Footstep footstep : footsteps) {
+			if ((footstep.getTime() < currPos + threshold) && (footstep.getTime() > currPos - threshold)) {
+				return footstep;
+			}
+		}
+		return null;
+	}
+	
 
 }
