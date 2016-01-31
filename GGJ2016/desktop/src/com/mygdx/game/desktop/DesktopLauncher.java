@@ -10,6 +10,6 @@ import com.teamsomething.ggj2016.game.GameScreenTest;
 public class DesktopLauncher {
 	public static void main (String[] arg) {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-		new LwjglApplication(new GameScreenTest(), config);
+		new LwjglApplication(new CoreGame(), config);
 	}
 }

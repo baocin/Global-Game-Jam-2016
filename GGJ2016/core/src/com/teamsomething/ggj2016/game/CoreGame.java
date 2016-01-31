@@ -17,6 +17,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.MoveToAction;
+import com.badlogic.gdx.utils.Logger;
 import com.badlogic.gdx.utils.Pool;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
@@ -39,14 +40,15 @@ public class CoreGame extends Game {
 
 	@Override
 	public void create() {
-		levels = new ArrayList<Level>();
-		Level testLevel = new Level();
-		try {
-			Level.loadLevel("theme1.txt");
-		} catch (IndexOutOfBoundsException e) {
-			System.out.println("Could not load music for the given theme file");
-			Gdx.app.debug("CoreGame", "Could not load music for the given theme file");
-		}
+		Gdx.app.setLogLevel(Logger.DEBUG);
+//		levels = new ArrayList<Level>();
+//		Level testLevel = new Level();
+//		try {
+//			Level.loadLevel("theme1.txt");
+//		} catch (IndexOutOfBoundsException e) {
+//			System.out.println("Could not load music for the given theme file");
+//			Gdx.app.debug("CoreGame", "Could not load music for the given theme file");
+//		}
 		WIDTH = Gdx.graphics.getWidth();
 		HEIGHT = Gdx.graphics.getHeight();
 
@@ -75,6 +77,8 @@ public class CoreGame extends Game {
 
 	@Override
 	public void render() {
+		super.render();
+		
 		Gdx.gl.glClearColor(0, 0, 0.2f, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
@@ -89,6 +93,8 @@ public class CoreGame extends Game {
 		batch.draw(leftWall, 0, 0, WIDTH, HEIGHT);
 		batch.draw(perspectiveTexture2, 0, 0, WIDTH, HEIGHT);
 		batch.end();
+		
+		
 	}
 
 	@Override
