@@ -32,7 +32,7 @@ public class GameScreen extends Game implements Screen {
 	private Texture rightWall;
 	private Texture perspectiveTexture;
 	private double HIT_THRESHOLD = 0.3;
-	private double LIT_THRESHOLD = 0.1;
+	private double LIT_THRESHOLD = 0.3;
 	private int footSpacing = 65;
 	private TextureAtlas leftWallTextureAtlas = new TextureAtlas(Gdx.files.internal("data/leftWall.atlas"));
 	private TextureAtlas rightWallTextureAtlas = new TextureAtlas(Gdx.files.internal("data/rightWall.atlas"));
@@ -195,6 +195,10 @@ public class GameScreen extends Game implements Screen {
 				double distanceTo = f.getTime() - level.getCurrPos();
 				if (Math.abs(distanceTo) < LIT_THRESHOLD) {
 					sprite.setColor(Color.BLUE);
+				}
+				if (-distanceTo > LIT_THRESHOLD && (!(f.isDidHit() || f.isDidMiss()))) {
+					sprite.setRotation((int) (level.getCurrPos() * 2000));
+					sprite.setColor(Color.FIREBRICK);
 				}
 
 				// Mark hits or misses
