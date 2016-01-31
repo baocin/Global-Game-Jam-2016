@@ -75,7 +75,11 @@ public class GameScreen extends Game implements Screen {
 
 	@Override
 	public void show() {
-		level = Level.loadLevel("theme1.txt");
+		startLevel("theme1.txt");
+	}
+
+	private void startLevel(String filename) {
+		level = Level.loadLevel(filename);
 		nextFootstep = 0;
 		music = Gdx.audio.newMusic(Gdx.files.internal(level.getMusicFiles().poll()));
 		music.play();
@@ -93,14 +97,39 @@ public class GameScreen extends Game implements Screen {
 					nextMusic.play();
 					nextMusic.setOnCompletionListener(this);
 					thisGameScreen.music = nextMusic;
+				} else {
+					// End of level!
+					// Play end of level sound
+					// After it ends, load level 2
+					Music endSound = Gdx.audio.newMusic(Gdx.files.internal("endOfLevel.ogg"));
+					endSound.play();
+					//final OnCompletionListener thisCompletionListener = this;
+					endSound.setOnCompletionListener(new OnCompletionListener() {
+						
+						@Override
+						public void onCompletion(Music music) {
+							music.dispose();
+							startLevel("theme2.txt");
+						}
+					});
 				}
 			}
 		});
 	}
 
+	// double totalGameTimer = 0;
+	// boolean levelStarted = false;
+
 	@Override
 	public void render(float delta) {
 		super.render();
+
+		// totalGameTimer += delta;
+		// if ((totalGameTimer >= 5) && (levelStarted == false)) {
+		// startLevel("theme1.txt");
+		// levelStarted = true;
+		// return;
+		// }
 
 		Gdx.gl.glClearColor(0, 0, 0.2f, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -231,7 +260,7 @@ public class GameScreen extends Game implements Screen {
 
 				// Celebrate hits!
 				if (f.isDidHit()) {
-					y += -distanceTo * 100; 
+					y += -distanceTo * 100;
 				}
 
 				sprite.setCenter(x, y);
