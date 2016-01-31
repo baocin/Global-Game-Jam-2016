@@ -13,15 +13,15 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g3d.particles.ParticleSystem;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
+import com.mygdx.game.ScreenManager;
 import com.teamsomething.ggj2016.game.gamelogic.Footstep;
 import com.teamsomething.ggj2016.game.gamelogic.FootstepType;
 import com.teamsomething.ggj2016.game.gamelogic.Level;
 
 public class GameScreen extends Game implements Screen {
+	public static int deathCounter = 0;
 	private static final float FOOTSTEP_LINE = 100;
 	private Stage stage;
 	static int WIDTH;
@@ -45,10 +45,12 @@ public class GameScreen extends Game implements Screen {
 	private Texture stairTexture;
 	private Texture frontTexture;
 	private Texture smokeTexture;
+	private TextureAtlas pentagramAtlas;
 
 	public GameScreen() {
 		leftWallAnimation = new Animation(1 / 15f, leftWallTextureAtlas.getRegions());
 		rightWallAnimation = new Animation(1 / 15f, rightWallTextureAtlas.getRegions());
+		pentagramAtlas = new TextureAtlas(Gdx.files.internal("data/pentagram.atlas"));
 
 		// batch = new SpriteBatch();
 		stage = new Stage();
@@ -122,6 +124,17 @@ public class GameScreen extends Game implements Screen {
 		// batch.draw(), x, y, originX, originY, width, height, scaleX, scaleY,
 		// rotation);
 		batch.draw(smokeTexture, 0, 0, WIDTH, HEIGHT);
+
+		// System.out.println(level.getSkipped());
+		int health = (level.getSkipped() % 7) + 1;
+		if (health >= 7) {
+			deathCounter++;
+			ScreenManager.getInstance().show(ScreenManager.Screens.TITLE);
+		} else {
+			batch.draw(pentagramAtlas.findRegion("000" + Integer.toString(health)), WIDTH / 2 - (72 / 2), HEIGHT - 72,
+					72, 72);
+
+		}
 		batch.draw(stairTexture, 0, 0, WIDTH, HEIGHT);
 		batch.draw(leftWallAnimation.getKeyFrame(elapsedTime, true), 0, 0, 225, HEIGHT);
 		batch.draw(rightWallAnimation.getKeyFrame(elapsedTime, true), WIDTH - 225, 0, 225, HEIGHT);

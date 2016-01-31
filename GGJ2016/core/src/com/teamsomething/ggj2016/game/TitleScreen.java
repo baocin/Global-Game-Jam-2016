@@ -39,7 +39,7 @@ public class TitleScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         
         batch.begin();
-        batch.draw(evilTexture, 200, 0, 500, Gdx.graphics.getHeight()/2);
+        	batch.draw(evilTexture, (float) (200+ Math.floor(GameScreen.deathCounter * Math.random() * 20)), (float) (Math.floor(GameScreen.deathCounter * Math.random())), 500, Gdx.graphics.getHeight()/2);
         font.draw(batch, "Dance Outta Hell", 100, Gdx.graphics.getHeight()/2+50);
         batch.end();
         
