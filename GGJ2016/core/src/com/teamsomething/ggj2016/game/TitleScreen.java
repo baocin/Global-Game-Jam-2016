@@ -46,7 +46,9 @@ public class TitleScreen implements Screen {
 		batch.begin();
 		batch.draw(evilTexture, (float) (200 + Math.floor(GameScreen.deathCounter * Math.random() * 20)),
 				(float) (Math.floor(GameScreen.deathCounter * Math.random())), 500, Gdx.graphics.getHeight() / 2);
-		font.draw(batch, "Dance Outta Hell", 100, Gdx.graphics.getHeight() / 2 + 50);
+		font.draw(batch, "Dance Outta Hell", 100, Gdx.graphics.getHeight() / 2 + 120);
+        font.draw(batch, "William Karnavas, Kevin Heu, Michael Pedersen", 100, Gdx.graphics.getHeight()/2+75);
+
 		batch.end();
 
 		boolean mouseLeftDown = Gdx.input.isButtonPressed(Input.Buttons.LEFT);
