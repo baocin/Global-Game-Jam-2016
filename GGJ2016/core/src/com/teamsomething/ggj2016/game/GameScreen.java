@@ -166,9 +166,9 @@ public class GameScreen extends Game implements Screen {
 		batch.draw(smokeTexture, 0, 0, WIDTH, HEIGHT);
 
 		// System.out.println(level.getSkipped());
-		int damage = (level.getSkipped() + level.getMisses()) ;
+		int damage = (level.getSkipped() + level.getMisses()) / 3 ;
 
-		System.out.println(damage);
+		//System.out.println(damage);
 		
 		if (damage == 5){
 			leftWallAnimation = new Animation(1 / 45f, leftWallTextureAtlas.getRegions());
