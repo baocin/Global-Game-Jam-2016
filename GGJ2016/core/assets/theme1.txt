@@ -1,5 +1,5 @@
 Segment Order:
-1
+4
 1
 2,3
 3,2
@@ -67,15 +67,31 @@ Segment:
 rythm4Lvl1.ogg
 l 
 
+l
+
 r
- 
+
+r 
+
+l
 l
 r
-l
 r
 l
+
 r
+
 l
+
+r
+
+l
+
+s
+r
+r
+r
+s
 s
 s
 s
