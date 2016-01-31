@@ -7,6 +7,7 @@ import java.util.LinkedList;
 
 import com.badlogic.gdx.Files.FileType;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.math.MathUtils;
 
 public class Level {
@@ -26,6 +27,11 @@ public class Level {
 	 *
 	 */
 	private LinkedList<String> musicFiles = new LinkedList<String>();
+
+	private LinkedList<Integer> chosenSegments = new LinkedList<Integer>();
+	private LinkedList<Double> segmentMusicDurations = new LinkedList<Double>();
+
+	private int currSection = 0;;
 
 	private enum LoadState {
 		NONE, ORDER, SEGMENT_FILENAME, SEGMENT_MOVES
@@ -165,6 +171,9 @@ public class Level {
 			startTime += segmentMusicDurations.get(chosenSegmentIndex);
 		}
 
+		level.setChosenSegments(chosenSegments);
+		level.setSegmentMusicDurations(segmentMusicDurations);
+
 		Gdx.app.debug(LOAD_LEVEL_TAG, level.footsteps.toString());
 
 		Gdx.app.debug(LOAD_LEVEL_TAG, "Chosen segments: " + chosenSegments.toString());
@@ -240,6 +249,45 @@ public class Level {
 			}
 		}
 		return results;
+	}
+
+	public void incrementCurrentSection() {
+		currSection++;
+	}
+
+	public int getCurrSection() {
+		return currSection;
+	}
+
+	/**
+	 * Sets the position within the level based on the durations of already
+	 * completed sections music, and progress within the current given section's
+	 * music
+	 * 
+	 * @param currSectionMusic
+	 */
+	public void syncWithMusic(Music currSectionMusic) {
+		double previousSectionDuration = 0;
+		for (int i = 0; i < currSection; i++) {
+			previousSectionDuration += segmentMusicDurations.get(chosenSegments.get(i));
+		}
+		setCurrPos(currSectionMusic.getPosition() + previousSectionDuration);
+	}
+
+	public LinkedList<Integer> getChosenSegments() {
+		return chosenSegments;
+	}
+
+	public void setChosenSegments(LinkedList<Integer> chosenSegments) {
+		this.chosenSegments = chosenSegments;
+	}
+
+	public LinkedList<Double> getSegmentMusicDurations() {
+		return segmentMusicDurations;
+	}
+
+	public void setSegmentMusicDurations(LinkedList<Double> segmentMusicDurations) {
+		this.segmentMusicDurations = segmentMusicDurations;
 	}
 
 }
