@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
+import com.mygdx.game.ScreenManager;
 
 public class GameScreen implements Screen {
     private Stage stage;
@@ -33,25 +34,32 @@ public class GameScreen implements Screen {
 
 	@Override
 	public void render(float delta) {
-		
 		System.out.println(delta);
-//		if(Gdx.input.isKeyPressed(Input.Keys.UP)){
-//			hallActor.sprite.translateY(10.0f);
-//		}
-//		if(Gdx.input.isKeyPressed(Input.Keys.DOWN)){
-//			hallActor.sprite.translateY(-10.0f);
-//			
-//		}
-
-		Gdx.gl.glClearColor(1, 1, 1, 1);
+		
+		Gdx.gl.glClearColor(0, 0, 0.2f, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+		batch.begin();
+			batch.draw(rightFootprintTexture, WIDTH / 2 + footSpacing - 50, 0);
+			batch.draw(leftFootprintTexture, WIDTH / 2 - footSpacing - 50, 0);
+			batch.draw(rightWall, 0, 0, WIDTH, HEIGHT);
+			batch.draw(leftWall, 0, 0, WIDTH, HEIGHT);
+			batch.draw(perspectiveTexture2, 0, 0, WIDTH, HEIGHT);
+		batch.end();
 		
 		batch.begin();
 		stage.act(delta);
 		stage.draw();
 		batch.end();
 	
-
+		if(Gdx.input.isKeyPressed(Input.Keys.UP)){
+			hallActor.sprite.translateY(10.0f);
+		}
+		if(Gdx.input.isKeyPressed(Input.Keys.DOWN)){
+			hallActor.sprite.translateY(-10.0f);
+			
+		}
+		
 	}
 
 	@Override
@@ -80,7 +88,7 @@ public class GameScreen implements Screen {
 
 	@Override
 	public void dispose() {
-
+		ScreenManager.getInstance().dispose();
 //        batch.dispose();
 //        texture.dispose();
 

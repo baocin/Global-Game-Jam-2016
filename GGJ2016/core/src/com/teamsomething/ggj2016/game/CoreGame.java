@@ -83,11 +83,11 @@ public class CoreGame extends Game {
 		// batch.setProjectionMatrix(cam.combined);
 
 		batch.begin();
-		batch.draw(rightFootprintTexture, WIDTH / 2 + footSpacing - 50, 0);
-		batch.draw(leftFootprintTexture, WIDTH / 2 - footSpacing - 50, 0);
-		batch.draw(rightWall, 0, 0, WIDTH, HEIGHT);
-		batch.draw(leftWall, 0, 0, WIDTH, HEIGHT);
-		batch.draw(perspectiveTexture2, 0, 0, WIDTH, HEIGHT);
+			batch.draw(rightFootprintTexture, WIDTH / 2 + footSpacing - 50, 0);
+			batch.draw(leftFootprintTexture, WIDTH / 2 - footSpacing - 50, 0);
+			batch.draw(rightWall, 0, 0, WIDTH, HEIGHT);
+			batch.draw(leftWall, 0, 0, WIDTH, HEIGHT);
+			batch.draw(perspectiveTexture2, 0, 0, WIDTH, HEIGHT);
 		batch.end();
 	}
 
