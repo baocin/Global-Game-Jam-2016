@@ -42,7 +42,6 @@ project(":desktop") {
         compile "com.badlogicgames.gdx:gdx-tools:$gdxVersion"
         compile "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-desktop"
         compile "com.badlogicgames.gdx:gdx-bullet-platform:$gdxVersion:natives-desktop"
-        compile "de.tomgrill.gdxdialogs:gdx-dialogs-desktop:1.0.0"
     }
 }
 
@@ -59,9 +58,6 @@ project(":core") {
         compile "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
         compile "com.badlogicgames.gdx:gdx-bullet:$gdxVersion"
         compile "com.badlogicgames.box2dlights:box2dlights:$box2DLightsVersion"
-        compile "net.dermetfan.libgdx-utils:libgdx-utils:0.13.2"
-        compile "net.dermetfan.libgdx-utils:libgdx-utils-box2d:0.13.2"
-        compile "de.tomgrill.gdxdialogs:gdx-dialogs-core:1.0.0"
     }
 }
 
