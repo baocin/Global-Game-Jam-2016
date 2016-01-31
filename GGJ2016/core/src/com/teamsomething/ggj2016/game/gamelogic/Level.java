@@ -162,6 +162,14 @@ public class Level {
 					FootstepType type = FootstepType.LEFT;
 					if (typeString.toLowerCase().startsWith("r")) {
 						type = FootstepType.RIGHT;
+					} else if (typeString.toLowerCase().startsWith("s")) {
+						// Add left or right randomly
+						if (MathUtils.randomBoolean()) {
+							type = FootstepType.RIGHT;
+						}
+						level.footsteps
+								.add(new Footstep((MathUtils.randomBoolean()) ? FootstepType.LEFT : FootstepType.RIGHT,
+										startTime + i * interval + interval / 2));
 					}
 					// Place new footstep on level's timeline
 					level.footsteps.add(new Footstep(type, startTime + i * interval));
@@ -274,6 +282,14 @@ public class Level {
 		setCurrPos(currSectionMusic.getPosition() + previousSectionDuration);
 	}
 
+	public double getLength() {
+		double length = 0;
+		for (double d : segmentMusicDurations) {
+			length += d;
+		}
+		return length;
+	}
+
 	public LinkedList<Integer> getChosenSegments() {
 		return chosenSegments;
 	}
@@ -318,6 +334,16 @@ public class Level {
 			}
 		}
 		return skipped;
+	}
+
+	public LinkedList<Footstep> getActiveFootsteps(double threshold) {
+		LinkedList<Footstep> found = new LinkedList<Footstep>();
+		for (Footstep footstep : footsteps) {
+			if ((footstep.getTime() < currPos + threshold) && (footstep.getTime() > currPos - threshold)) {
+				found.add(footstep);
+			}
+		}
+		return found;
 	}
 
 }

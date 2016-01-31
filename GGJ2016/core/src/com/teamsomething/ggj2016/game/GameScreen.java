@@ -31,8 +31,8 @@ public class GameScreen extends Game implements Screen {
 	private Texture leftWall;
 	private Texture rightWall;
 	private Texture perspectiveTexture;
-	private double HIT_THRESHOLD = 0.6;
-	private double LIT_THRESHOLD = 0.2;
+	private double HIT_THRESHOLD = 0.3;
+	private double LIT_THRESHOLD = 0.1;
 	private int footSpacing = 65;
 	private TextureAtlas leftWallTextureAtlas = new TextureAtlas(Gdx.files.internal("data/leftWall.atlas"));
 	private TextureAtlas rightWallTextureAtlas = new TextureAtlas(Gdx.files.internal("data/rightWall.atlas"));
@@ -45,8 +45,7 @@ public class GameScreen extends Game implements Screen {
 	private Texture stairTexture;
 	private Texture frontTexture;
 	private Texture smokeTexture;
-	
-	
+
 	public GameScreen() {
 		leftWallAnimation = new Animation(1 / 15f, leftWallTextureAtlas.getRegions());
 		rightWallAnimation = new Animation(1 / 15f, rightWallTextureAtlas.getRegions());
@@ -71,7 +70,6 @@ public class GameScreen extends Game implements Screen {
 		smokeTexture = new Texture(Gdx.files.internal("smoke.jpg"));
 
 	}
-	
 
 	@Override
 	public void show() {
@@ -123,8 +121,8 @@ public class GameScreen extends Game implements Screen {
 		elapsedTime += Gdx.graphics.getDeltaTime();
 		// batch.draw(), x, y, originX, originY, width, height, scaleX, scaleY,
 		// rotation);
-		batch.draw(smokeTexture, 0,0,WIDTH, HEIGHT);
-		batch.draw(stairTexture, 0,0,WIDTH, HEIGHT);
+		batch.draw(smokeTexture, 0, 0, WIDTH, HEIGHT);
+		batch.draw(stairTexture, 0, 0, WIDTH, HEIGHT);
 		batch.draw(leftWallAnimation.getKeyFrame(elapsedTime, true), 0, 0, 225, HEIGHT);
 		batch.draw(rightWallAnimation.getKeyFrame(elapsedTime, true), WIDTH - 225, 0, 225, HEIGHT);
 		batch.end();
@@ -134,14 +132,16 @@ public class GameScreen extends Game implements Screen {
 		// TODO:
 		level.syncWithMusic(music);
 
-//		// Announce next footstep, if one has been passed
-//		if (level.getFootsteps().get(nextFootstep).getTime() < level.getCurrPos()) {
-//			// "Next" footstep is in the past
-//			nextFootstep++;
-//
-//			// Announce
-//			System.out.println("Next footstep is now: " + level.getFootsteps().get(nextFootstep).toString());
-//		}
+		// // Announce next footstep, if one has been passed
+		// if (level.getFootsteps().get(nextFootstep).getTime() <
+		// level.getCurrPos()) {
+		// // "Next" footstep is in the past
+		// nextFootstep++;
+		//
+		// // Announce
+		// System.out.println("Next footstep is now: " +
+		// level.getFootsteps().get(nextFootstep).toString());
+		// }
 
 		// TODO: Look for input
 		boolean leftPressed = Gdx.input.isKeyJustPressed(Input.Keys.SHIFT_LEFT);
@@ -151,18 +151,22 @@ public class GameScreen extends Game implements Screen {
 
 			// If pressed DURING a footstep, mark footstep as hit if it is left.
 			// Otherwise miss.
-			if (level.getActiveFootstep(HIT_THRESHOLD) != null) {
-				Footstep active = level.getActiveFootstep(HIT_THRESHOLD);
-				if ((!active.isDidHit()) && (!active.isDidMiss())) {
-					if (((active.getType() == FootstepType.LEFT) && leftPressed)
-							|| ((active.getType() == FootstepType.RIGHT) && rightPressed)) {
-						// HIT!
-						active.setDidHit(true);
-						//System.out.println("HIT FOOTSTEP: " + active.toString());
-					} else {
-						// Miss.
-						active.setDidMiss(true);
-						//System.out.println("MISSED FOOTSTEP: " + active.toString());
+			for (Footstep f : level.getActiveFootsteps(HIT_THRESHOLD)) {
+				if (f != null) {
+					Footstep active = f;
+					if ((!active.isDidHit()) && (!active.isDidMiss())) {
+						if (((active.getType() == FootstepType.LEFT) && leftPressed)
+								|| ((active.getType() == FootstepType.RIGHT) && rightPressed)) {
+							// HIT!
+							active.setDidHit(true);
+							// System.out.println("HIT FOOTSTEP: " +
+							// active.toString());
+						} else {
+							// Miss.
+							active.setDidMiss(true);
+							// System.out.println("MISSED FOOTSTEP: " +
+							// active.toString());
+						}
 					}
 				}
 			}
@@ -171,7 +175,7 @@ public class GameScreen extends Game implements Screen {
 		// Render visible footsteps
 		batch.begin();
 		{
-			double startTime = -3f;
+			double startTime = -2;
 			double farthestTime = 5.0f;
 			for (Footstep f : level.getFootstepsBetween(startTime, farthestTime)) {
 				float distanceOnRoad = (float) ((f.getTime() - level.getCurrPos()) / (farthestTime - startTime));
@@ -205,7 +209,7 @@ public class GameScreen extends Game implements Screen {
 					leftFactor = -1;
 				}
 				sprite.setCenter(WIDTH / 2 + (leftFactor * (WIDTH / 11) * (1 - distanceOnRoad)),
-						(distanceOnRoad * (HEIGHT / 2 + 100 - FOOTSTEP_LINE)) + FOOTSTEP_LINE);
+						(distanceOnRoad * (HEIGHT / 2 + 50 - FOOTSTEP_LINE)) + FOOTSTEP_LINE);
 
 				sprite.draw(batch);
 			}
