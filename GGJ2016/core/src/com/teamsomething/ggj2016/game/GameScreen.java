@@ -45,12 +45,15 @@ public class GameScreen extends Game implements Screen {
 	private Texture stairTexture;
 	private Texture frontTexture;
 	private Texture smokeTexture;
+	private TextureAtlas pentagramAtlas;
 	
 	
 	public GameScreen() {
 		leftWallAnimation = new Animation(1 / 15f, leftWallTextureAtlas.getRegions());
 		rightWallAnimation = new Animation(1 / 15f, rightWallTextureAtlas.getRegions());
-
+		pentagramAtlas = new TextureAtlas(Gdx.files.internal("data/pentagram.atlas"));
+		
+		
 		// batch = new SpriteBatch();
 		stage = new Stage();
 		// TODO Auto-generated constructor stub
@@ -124,6 +127,8 @@ public class GameScreen extends Game implements Screen {
 		// batch.draw(), x, y, originX, originY, width, height, scaleX, scaleY,
 		// rotation);
 		batch.draw(smokeTexture, 0,0,WIDTH, HEIGHT);
+		int health = (1) % 7; 
+		batch.draw(pentagramAtlas.findRegion("000" + Integer.toString(health)), WIDTH/2-(72/2), HEIGHT-72, 72, 72);
 		batch.draw(stairTexture, 0,0,WIDTH, HEIGHT);
 		batch.draw(leftWallAnimation.getKeyFrame(elapsedTime, true), 0, 0, 225, HEIGHT);
 		batch.draw(rightWallAnimation.getKeyFrame(elapsedTime, true), WIDTH - 225, 0, 225, HEIGHT);

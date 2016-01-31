@@ -47,7 +47,10 @@ public class TitleScreen implements Screen {
         int mouseX = Gdx.input.getX();
         int mouseY = Gdx.input.getY();
         
-        if (mouseLeftDown && mouseX > Gdx.graphics.getHeight()/2){
+        boolean leftPressed = Gdx.input.isKeyJustPressed(Input.Keys.SHIFT_LEFT);
+		boolean rightPressed = Gdx.input.isKeyJustPressed(Input.Keys.SHIFT_RIGHT);
+        
+        if (mouseLeftDown || leftPressed || rightPressed){
         	ScreenManager.getInstance().show(ScreenManager.Screens.GAME);
         }else{
 //        	ScreenManager.getInstance().show(ScreenManager.Screens.);
