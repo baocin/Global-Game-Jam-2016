@@ -49,12 +49,13 @@ public class GameScreen extends Game implements Screen {
 	private Animation stairsAnimation;
 	private boolean endingLevel = false;
 	private TextureAtlas stairsAtlas;
-	
 
 	public GameScreen() {
 		leftWallAnimation = new Animation(1 / 15f, leftWallTextureAtlas.getRegions());
 		rightWallAnimation = new Animation(1 / 15f, rightWallTextureAtlas.getRegions());
 		pentagramAtlas = new TextureAtlas(Gdx.files.internal("data/pentagram.atlas"));
+		stairsAtlas = new TextureAtlas(Gdx.files.internal("data/stairs.atlas"));
+		stairsAnimation = new Animation(1, stairsAtlas.getRegions());
 
 		// batch = new SpriteBatch();
 		stage = new Stage();
@@ -97,41 +98,42 @@ public class GameScreen extends Game implements Screen {
 
 				String nextMusicName = level.getMusicFiles().poll();
 				if (!endingLevel) {
-				if (nextMusicName != null) {
-					Music nextMusic = Gdx.audio.newMusic(Gdx.files.internal(nextMusicName));
-					nextMusic.play();
-					nextMusic.setOnCompletionListener(this);
-					thisGameScreen.music = nextMusic;
-				} else {
-					// End of level!
-					// Play end of level sound
-					// After it ends, load level 2
-					Music endSound = Gdx.audio.newMusic(Gdx.files.internal("endOfLevel.ogg"));
-					endSound.play();
-					//final OnCompletionListener thisCompletionListener = this;
+					if (nextMusicName != null) {
+						Music nextMusic = Gdx.audio.newMusic(Gdx.files.internal(nextMusicName));
+						nextMusic.play();
+						nextMusic.setOnCompletionListener(this);
+						thisGameScreen.music = nextMusic;
+					} else {
+						// End of level!
+						// Play end of level sound
+						// After it ends, load level 2
+						Music endSound = Gdx.audio.newMusic(Gdx.files.internal("endOfLevel.ogg"));
+						endSound.play();
+						// final OnCompletionListener thisCompletionListener =
 						// this;
-					endSound.setOnCompletionListener(new OnCompletionListener() {
-						
-						@Override
-						public void onCompletion(Music music) {
-							music.dispose();
-							startLevel("theme2.txt");
-						}
-					});
+						// this;
+						endSound.setOnCompletionListener(new OnCompletionListener() {
+
+							@Override
+							public void onCompletion(Music music) {
+								music.dispose();
+								startLevel("theme2.txt");
+							}
+						});
 					}
 				}
 			}
 		});
 	}
 
-	// double totalGameTimer = 0;
+	double totalGameTimer = 0;
 	// boolean levelStarted = false;
 
 	@Override
 	public void render(float delta) {
 		super.render();
 
-		// totalGameTimer += delta;
+		totalGameTimer += delta;
 		// if ((totalGameTimer >= 5) && (levelStarted == false)) {
 		// startLevel("theme1.txt");
 		// levelStarted = true;
@@ -162,22 +164,24 @@ public class GameScreen extends Game implements Screen {
 		batch.draw(smokeTexture, 0, 0, WIDTH, HEIGHT);
 
 		// System.out.println(level.getSkipped());
-		int health = (level.getSkipped() % 7) + 1;
-		damage = 1;
+		int damage = (level.getSkipped() + level.getMisses()) / 4;
+
 		System.out.println(damage);
-		if (health >= 7) {
+		if (damage >= 6) {
 			deathCounter++;
 			ScreenManager.getInstance().show(ScreenManager.Screens.TITLE);
 			endingLevel = true;
 			music.stop();
 			music.dispose();
 		} else {
-			batch.draw(pentagramAtlas.findRegion("000" + Integer.toString(health)), WIDTH / 2 - (72 / 2), HEIGHT - 72,
-					72, 72);
+			batch.draw(pentagramAtlas.findRegion("000" + Integer.toString((damage % 7) + 1)), WIDTH / 2 - (72 / 2),
+					HEIGHT - 72, 72, 72);
 
 		}
-//		batch.draw(stairTexture, 0, (float) -(level.getCurrPos() * 10), WIDTH, HEIGHT);
-		batch.draw(stairsAnimation.getKeyFrame((int)level.getHits() + level.getSkipped(), false), 0, (float) 0, WIDTH, HEIGHT/2);
+		// batch.draw(stairTexture, 0, (float) -(level.getCurrPos() * 10),
+		// WIDTH, HEIGHT);
+		batch.draw(stairsAnimation.getKeyFrame(level.getFootstepsBetween(-level.getCurrPos(), 0).size(), true),
+				(float) 0, 0, WIDTH, HEIGHT / 2);
 		batch.draw(leftWallAnimation.getKeyFrame(elapsedTime, true), 0, 0, 225, HEIGHT);
 		batch.draw(rightWallAnimation.getKeyFrame(elapsedTime, true), WIDTH - 225, 0, 225, HEIGHT);
 		batch.end();
