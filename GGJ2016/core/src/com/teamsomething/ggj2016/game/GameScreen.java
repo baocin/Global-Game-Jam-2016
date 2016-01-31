@@ -20,11 +20,11 @@ import com.teamsomething.ggj2016.game.gamelogic.FootstepType;
 import com.teamsomething.ggj2016.game.gamelogic.Level;
 
 public class GameScreen extends Game implements Screen {
+	private static final float FOOTSTEP_LINE = 25;
 	private Stage stage;
 	static int WIDTH;
 	static int HEIGHT;
 	private SpriteBatch batch;
-	private Texture leftFootprintTexture;
 	private Texture rightFootprintTexture;
 	private Texture leftWall;
 	private Texture rightWall;
@@ -38,6 +38,7 @@ public class GameScreen extends Game implements Screen {
 	private float elapsedTime = 0;
 	private Level level;
 	private int nextFootstep;
+	private Music music;
 
 	public GameScreen() {
 		leftWallAnimation = new Animation(1 / 15f, leftWallTextureAtlas.getRegions());
@@ -54,11 +55,10 @@ public class GameScreen extends Game implements Screen {
 
 		batch = new SpriteBatch();
 
-		rightFootprintTexture = new Texture(Gdx.files.internal("rightShoePrintPerspectiveSmall.png"));
-		leftFootprintTexture = new Texture(Gdx.files.internal("leftShoePrintPerspectiveSmall.png"));
 		// rightWall = new Texture(Gdx.files.internal("rightWall1.png"));
 		// leftWall = new Texture(Gdx.files.internal("leftWall1.png"));
 		perspectiveTexture = new Texture(Gdx.files.internal("perspective2.png"));
+		rightFootprintTexture = new Texture(Gdx.files.internal("footprintWhite.png"));
 
 	}
 
@@ -66,19 +66,22 @@ public class GameScreen extends Game implements Screen {
 	public void show() {
 		level = Level.loadLevel("theme1.txt");
 		nextFootstep = 0;
-		Music music = Gdx.audio.newMusic(Gdx.files.internal(level.getMusicFiles().poll()));
+		music = Gdx.audio.newMusic(Gdx.files.internal(level.getMusicFiles().poll()));
 		music.play();
+		final GameScreen thisGameScreen = this;
 		music.setOnCompletionListener(new OnCompletionListener() {
 
 			@Override
 			public void onCompletion(Music music) {
 				music.dispose();
+				level.incrementCurrentSection();
 
 				String nextMusicName = level.getMusicFiles().poll();
 				if (nextMusicName != null) {
 					Music nextMusic = Gdx.audio.newMusic(Gdx.files.internal(nextMusicName));
 					nextMusic.play();
 					nextMusic.setOnCompletionListener(this);
+					thisGameScreen.music = nextMusic;
 				}
 			}
 		});
@@ -114,7 +117,10 @@ public class GameScreen extends Game implements Screen {
 		batch.end();
 
 		// Advance in level
-		level.addCurrPos(delta);
+		//level.addCurrPos(delta);
+		//TODO:
+		level.syncWithMusic(music);
+		
 
 		// Announce next footstep, if one has been passed
 		if (level.getFootsteps().get(nextFootstep).getTime() < level.getCurrPos()) {
@@ -153,25 +159,25 @@ public class GameScreen extends Game implements Screen {
 		// Render visible footsteps
 		batch.begin();
 		{
-			double farthestTime = 4.0f;
+			double farthestTime = 8.0f;
 			for (Footstep f : level.getFootstepsBetween(0, farthestTime)) {
 				float distanceOnRoad = (float) ((f.getTime() - level.getCurrPos()) / farthestTime);
 				distanceOnRoad -= 1;
-				distanceOnRoad = -(-Math.abs(distanceOnRoad * distanceOnRoad) - 1);
+				distanceOnRoad = -(-Math.abs(distanceOnRoad * distanceOnRoad * distanceOnRoad) - 1);
 				distanceOnRoad = 2 - (distanceOnRoad);
-				Sprite sprite = new Sprite(leftFootprintTexture);
+				Sprite sprite = new Sprite(rightFootprintTexture);
 				// Flip for left foot
-				sprite.flip(f.getType() == FootstepType.RIGHT, false);
-				// Add a little bit to never get a log of zero issue
-				// sprite.setAlpha((float) Math.max(0,
-				// Math.min(1, (float) Math.log((f.getTime() -
-				// level.getCurrPos()) / farthestTime + 0.001f))));
-				float leftFactor = -1;
-				if (f.getType() == FootstepType.RIGHT) {
-					leftFactor = 1;
+				sprite.flip(f.getType() == FootstepType.LEFT, false);
+				// Add alpha
+				sprite.setAlpha((1f - distanceOnRoad) * 0.9f + 0.1f);
+				// Add scaling
+				sprite.setScale((1f - distanceOnRoad) * 0.6f);
+				float leftFactor = 1;
+				if (f.getType() == FootstepType.LEFT) {
+					leftFactor = -1;
 				}
-				sprite.setCenter(WIDTH / 2 + (leftFactor * (WIDTH / 7) * (1 - distanceOnRoad)),
-						distanceOnRoad * (HEIGHT / 2 - 40));
+				sprite.setCenter(WIDTH / 2 + (leftFactor * (WIDTH / 8) * (1 - distanceOnRoad)),
+						distanceOnRoad * (HEIGHT / 2 - 50) + FOOTSTEP_LINE);
 
 				sprite.draw(batch);
 			}
