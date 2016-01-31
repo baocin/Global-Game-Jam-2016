@@ -328,8 +328,8 @@ public class Level {
 
 	public int getSkipped() {
 		int skipped = 0;
-		for (Footstep f : getFootstepsBetween(0, currPos - 1)) {
-			if (!f.isDidHit() && !f.isDidMiss()) {
+		for (Footstep f : getFootstepsBetween(-currPos, -0.5)) {
+			if (!(f.isDidHit() || f.isDidMiss())) {
 				skipped++;
 			}
 		}

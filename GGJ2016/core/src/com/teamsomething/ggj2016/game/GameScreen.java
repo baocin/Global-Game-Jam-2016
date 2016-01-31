@@ -47,6 +47,7 @@ public class GameScreen extends Game implements Screen {
 	private Texture smokeTexture;
 	private TextureAtlas pentagramAtlas;
 	private Animation stairsAnimation;
+	private boolean endingLevel = false;
 	private TextureAtlas stairsAtlas;
 	
 
@@ -54,9 +55,7 @@ public class GameScreen extends Game implements Screen {
 		leftWallAnimation = new Animation(1 / 15f, leftWallTextureAtlas.getRegions());
 		rightWallAnimation = new Animation(1 / 15f, rightWallTextureAtlas.getRegions());
 		pentagramAtlas = new TextureAtlas(Gdx.files.internal("data/pentagram.atlas"));
-		stairsAtlas = new TextureAtlas(Gdx.files.internal("data/stairs.atlas"));
-		stairsAnimation = new Animation(1, stairsAtlas.getRegions());
-		
+
 		// batch = new SpriteBatch();
 		stage = new Stage();
 		// TODO Auto-generated constructor stub
@@ -97,6 +96,7 @@ public class GameScreen extends Game implements Screen {
 				level.incrementCurrentSection();
 
 				String nextMusicName = level.getMusicFiles().poll();
+				if (!endingLevel) {
 				if (nextMusicName != null) {
 					Music nextMusic = Gdx.audio.newMusic(Gdx.files.internal(nextMusicName));
 					nextMusic.play();
@@ -109,6 +109,7 @@ public class GameScreen extends Game implements Screen {
 					Music endSound = Gdx.audio.newMusic(Gdx.files.internal("endOfLevel.ogg"));
 					endSound.play();
 					//final OnCompletionListener thisCompletionListener = this;
+						// this;
 					endSound.setOnCompletionListener(new OnCompletionListener() {
 						
 						@Override
@@ -117,6 +118,7 @@ public class GameScreen extends Game implements Screen {
 							startLevel("theme2.txt");
 						}
 					});
+					}
 				}
 			}
 		});
@@ -161,9 +163,14 @@ public class GameScreen extends Game implements Screen {
 
 		// System.out.println(level.getSkipped());
 		int health = (level.getSkipped() % 7) + 1;
+		damage = 1;
+		System.out.println(damage);
 		if (health >= 7) {
 			deathCounter++;
 			ScreenManager.getInstance().show(ScreenManager.Screens.TITLE);
+			endingLevel = true;
+			music.stop();
+			music.dispose();
 		} else {
 			batch.draw(pentagramAtlas.findRegion("000" + Integer.toString(health)), WIDTH / 2 - (72 / 2), HEIGHT - 72,
 					72, 72);
