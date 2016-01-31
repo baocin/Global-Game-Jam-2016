@@ -13,6 +13,7 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g3d.particles.ParticleSystem;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
@@ -21,7 +22,7 @@ import com.teamsomething.ggj2016.game.gamelogic.FootstepType;
 import com.teamsomething.ggj2016.game.gamelogic.Level;
 
 public class GameScreen extends Game implements Screen {
-	private static final float FOOTSTEP_LINE = 25;
+	private static final float FOOTSTEP_LINE = 100;
 	private Stage stage;
 	static int WIDTH;
 	static int HEIGHT;
@@ -128,14 +129,14 @@ public class GameScreen extends Game implements Screen {
 		// TODO:
 		level.syncWithMusic(music);
 
-		// Announce next footstep, if one has been passed
-		if (level.getFootsteps().get(nextFootstep).getTime() < level.getCurrPos()) {
-			// "Next" footstep is in the past
-			nextFootstep++;
-
-			// Announce
-			System.out.println("Next footstep is now: " + level.getFootsteps().get(nextFootstep).toString());
-		}
+//		// Announce next footstep, if one has been passed
+//		if (level.getFootsteps().get(nextFootstep).getTime() < level.getCurrPos()) {
+//			// "Next" footstep is in the past
+//			nextFootstep++;
+//
+//			// Announce
+//			System.out.println("Next footstep is now: " + level.getFootsteps().get(nextFootstep).toString());
+//		}
 
 		// TODO: Look for input
 		boolean leftPressed = Gdx.input.isKeyJustPressed(Input.Keys.SHIFT_LEFT);
@@ -152,11 +153,11 @@ public class GameScreen extends Game implements Screen {
 							|| ((active.getType() == FootstepType.RIGHT) && rightPressed)) {
 						// HIT!
 						active.setDidHit(true);
-						System.out.println("HIT FOOTSTEP: " + active.toString());
+						//System.out.println("HIT FOOTSTEP: " + active.toString());
 					} else {
 						// Miss.
 						active.setDidMiss(true);
-						System.out.println("MISSED FOOTSTEP: " + active.toString());
+						//System.out.println("MISSED FOOTSTEP: " + active.toString());
 					}
 				}
 			}
@@ -199,7 +200,7 @@ public class GameScreen extends Game implements Screen {
 					leftFactor = -1;
 				}
 				sprite.setCenter(WIDTH / 2 + (leftFactor * (WIDTH / 8) * (1 - distanceOnRoad)),
-						distanceOnRoad * (HEIGHT / 2 + 100) + FOOTSTEP_LINE);
+						(distanceOnRoad * (HEIGHT / 2 + 100 - FOOTSTEP_LINE)) + FOOTSTEP_LINE);
 
 				sprite.draw(batch);
 			}

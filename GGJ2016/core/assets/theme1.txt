@@ -1,5 +1,5 @@
 Segment Order:
-1
+4
 1
 2,3
 3,2
@@ -26,7 +26,7 @@ r
 
 Segment:
 16.75
-rythm2Lvl1.ogg
+rythm2Lvl1.wav
 l
 
 r
@@ -45,7 +45,7 @@ l
 r
 Segment:
 16.75
-rythm3Lvl1.ogg
+rythm3Lvl1.wav
 l 
 
 r
@@ -64,18 +64,34 @@ l
 
 Segment:
 16.75
-rythm4Lvl1.ogg
+rythm4Lvl1.wav
 l 
 
+l
+
 r
- 
+
+r 
+
+l
 l
 r
-l
 r
 l
+
 r
+
 l
+
+r
+
+l
+
+s
+r
+r
+r
+s
 s
 s
 s
