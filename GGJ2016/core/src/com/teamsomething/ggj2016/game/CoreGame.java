@@ -5,7 +5,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Logger;
-import com.mygdx.game.CamManager;
 import com.mygdx.game.ScreenManager;
 
 public class CoreGame extends Game {
