@@ -9,6 +9,7 @@ import com.teamsomething.ggj2016.game.GameScreen;
 public class DesktopLauncher {
 	public static void main (String[] arg) {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
+		config.title = "Dance Outta Hell";
 		new LwjglApplication(new CoreGame(), config);
 	}
 }

@@ -81,6 +81,8 @@ public class GameScreen extends Game implements Screen {
 	@Override
 	public void show() {
 		startLevel("theme1.txt");
+		leftWallAnimation = new Animation(1 / 15f, leftWallTextureAtlas.getRegions());
+		rightWallAnimation = new Animation(1 / 15f, rightWallTextureAtlas.getRegions());
 	}
 
 	private void startLevel(String filename) {
@@ -164,9 +166,15 @@ public class GameScreen extends Game implements Screen {
 		batch.draw(smokeTexture, 0, 0, WIDTH, HEIGHT);
 
 		// System.out.println(level.getSkipped());
-		int damage = (level.getSkipped() + level.getMisses()) / 4;
+		int damage = (level.getSkipped() + level.getMisses()) ;
 
 		System.out.println(damage);
+		
+		if (damage == 5){
+			leftWallAnimation = new Animation(1 / 45f, leftWallTextureAtlas.getRegions());
+			rightWallAnimation = new Animation(1 / 45f, rightWallTextureAtlas.getRegions());
+		}
+		
 		if (damage >= 6) {
 			deathCounter++;
 			ScreenManager.getInstance().show(ScreenManager.Screens.TITLE);
