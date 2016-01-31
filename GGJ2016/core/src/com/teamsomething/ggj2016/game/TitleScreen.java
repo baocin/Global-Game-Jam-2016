@@ -5,6 +5,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -14,12 +15,14 @@ public class TitleScreen implements Screen {
 	private SpriteBatch batch;
     private BitmapFont font;
 	private Stage stage;
+	private Texture evilTexture;
     
 	public TitleScreen() {
 		batch = new SpriteBatch();    
         font = new BitmapFont();
         font.setColor(Color.RED);
-        
+		evilTexture = new Texture(Gdx.files.internal("evil.png"));
+
         stage = new Stage();
 	}
 
@@ -36,6 +39,7 @@ public class TitleScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         
         batch.begin();
+        batch.draw(evilTexture, 200, 0, 500, Gdx.graphics.getHeight()/2);
         font.draw(batch, "Dance Outta Hell", 100, Gdx.graphics.getHeight()/2+50);
         batch.end();
         
