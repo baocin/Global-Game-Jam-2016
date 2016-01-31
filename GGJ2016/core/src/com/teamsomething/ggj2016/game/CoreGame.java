@@ -35,69 +35,71 @@ public class CoreGame extends Game {
 	private Texture rightWall;
 	private ArrayList<Level> levels;
 	private int footSpacing = 65;
-	
-    @Override
-    public void create() {
-    	levels = new ArrayList<Level>();
-    	Level testLevel = new Level();
-    	try{
-    	testLevel.loadLevel("themeTest1.txt");
-    	}catch(IndexOutOfBoundsException e){
-    		System.out.println("Could not load music for the given theme file");
-    		Gdx.app.debug("CoreGame", "Could not load music for the given theme file");
-    	}
-    	WIDTH = Gdx.graphics.getWidth();
-    	HEIGHT = Gdx.graphics.getHeight();
-    	
-//    	cam = new OrthographicCamera(WIDTH, HEIGHT);
-//    	cam.setToOrtho(false,WIDTH, HEIGHT);
-//    	cam.translate(WIDTH/2, HEIGHT/2);
-//    	cam.update();
-    	
-    	batch = new SpriteBatch();
-    	
-    	rightFootprintTexture = new Texture(Gdx.files.internal("rightShoePrintPerspectiveSmall.png"));
-    	leftFootprintTexture = new Texture(Gdx.files.internal("leftShoePrintPerspectiveSmall.png"));
-    	rightWall = new Texture(Gdx.files.internal("rightWall.png"));
-    	leftWall = new Texture(Gdx.files.internal("leftWall.png"));
-    	
-    	ScreenManager.getInstance().initialize(this);
-        ScreenManager.getInstance().show(ScreenManager.Screens.GAME);
-    }
+	private Texture perspectiveTexture2;
 
-    @Override
-    public void dispose() {
-    	ScreenManager.getInstance().dispose();
-    	
-    }
+	@Override
+	public void create() {
+		levels = new ArrayList<Level>();
+		Level testLevel = new Level();
+		try {
+			Level.loadLevel("theme1.txt");
+		} catch (IndexOutOfBoundsException e) {
+			System.out.println("Could not load music for the given theme file");
+			Gdx.app.debug("CoreGame", "Could not load music for the given theme file");
+		}
+		WIDTH = Gdx.graphics.getWidth();
+		HEIGHT = Gdx.graphics.getHeight();
 
-    @Override
-    public void render() {
-    	Gdx.gl.glClearColor(0, 0, 0.2f, 1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        
-//        cam.update();
-        
-//        batch.setProjectionMatrix(cam.combined);
-        
-        batch.begin();
-    		batch.draw(rightFootprintTexture, WIDTH/2+footSpacing-50, 0);
-    		batch.draw(leftFootprintTexture, WIDTH/2-footSpacing-50, 0);
-    		batch.draw(rightWall, 0, 0, WIDTH, HEIGHT );
-    		batch.draw(leftWall, 0, 0, WIDTH, HEIGHT );
-    		batch.draw(new Texture(Gdx.files.internal("perspective2.png")), 0, 0, WIDTH, HEIGHT );
-        batch.end();
-    }
+		// cam = new OrthographicCamera(WIDTH, HEIGHT);
+		// cam.setToOrtho(false,WIDTH, HEIGHT);
+		// cam.translate(WIDTH/2, HEIGHT/2);
+		// cam.update();
 
-    @Override
-    public void resize(int width, int height) {
-    }
+		batch = new SpriteBatch();
 
-    @Override
-    public void pause() {
-    }
+		rightFootprintTexture = new Texture(Gdx.files.internal("rightShoePrintPerspectiveSmall.png"));
+		leftFootprintTexture = new Texture(Gdx.files.internal("leftShoePrintPerspectiveSmall.png"));
+		rightWall = new Texture(Gdx.files.internal("rightWall.png"));
+		leftWall = new Texture(Gdx.files.internal("leftWall.png"));
+		perspectiveTexture2 = new Texture(Gdx.files.internal("perspective2.png"));
 
-    @Override
-    public void resume() {
-    }
+		ScreenManager.getInstance().initialize(this);
+		ScreenManager.getInstance().show(ScreenManager.Screens.GAME);
+	}
+
+	@Override
+	public void dispose() {
+		ScreenManager.getInstance().dispose();
+
+	}
+
+	@Override
+	public void render() {
+		Gdx.gl.glClearColor(0, 0, 0.2f, 1);
+		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+		// cam.update();
+
+		// batch.setProjectionMatrix(cam.combined);
+
+		batch.begin();
+		batch.draw(rightFootprintTexture, WIDTH / 2 + footSpacing - 50, 0);
+		batch.draw(leftFootprintTexture, WIDTH / 2 - footSpacing - 50, 0);
+		batch.draw(rightWall, 0, 0, WIDTH, HEIGHT);
+		batch.draw(leftWall, 0, 0, WIDTH, HEIGHT);
+		batch.draw(perspectiveTexture2, 0, 0, WIDTH, HEIGHT);
+		batch.end();
+	}
+
+	@Override
+	public void resize(int width, int height) {
+	}
+
+	@Override
+	public void pause() {
+	}
+
+	@Override
+	public void resume() {
+	}
 }
