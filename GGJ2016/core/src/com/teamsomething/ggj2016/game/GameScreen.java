@@ -43,6 +43,8 @@ public class GameScreen extends Game implements Screen {
 	private Music music;
 	private Texture stairTexture;
 	private Texture frontTexture;
+	private Texture smokeTexture;
+	
 	
 	public GameScreen() {
 		leftWallAnimation = new Animation(1 / 15f, leftWallTextureAtlas.getRegions());
@@ -65,7 +67,10 @@ public class GameScreen extends Game implements Screen {
 		rightFootprintTexture = new Texture(Gdx.files.internal("footprintWhite.png"));
 		stairTexture = new Texture(Gdx.files.internal("stairs.png"));
 		frontTexture = new Texture(Gdx.files.internal("whiteGradient.png"));
+		smokeTexture = new Texture(Gdx.files.internal("smoke.jpg"));
+
 	}
+	
 
 	@Override
 	public void show() {
@@ -117,7 +122,7 @@ public class GameScreen extends Game implements Screen {
 		elapsedTime += Gdx.graphics.getDeltaTime();
 		// batch.draw(), x, y, originX, originY, width, height, scaleX, scaleY,
 		// rotation);
-		batch.draw(frontTexture, 225,HEIGHT/2,WIDTH/3, HEIGHT/3);
+		batch.draw(smokeTexture, 0,0,WIDTH, HEIGHT);
 		batch.draw(stairTexture, 0,0,WIDTH, HEIGHT);
 		batch.draw(leftWallAnimation.getKeyFrame(elapsedTime, true), 0, 0, 225, HEIGHT);
 		batch.draw(rightWallAnimation.getKeyFrame(elapsedTime, true), WIDTH - 225, 0, 225, HEIGHT);
