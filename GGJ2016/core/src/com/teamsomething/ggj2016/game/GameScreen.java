@@ -169,7 +169,7 @@ public class GameScreen extends Game implements Screen {
 			double startTime = -3f;
 			double farthestTime = 5.0f;
 			for (Footstep f : level.getFootstepsBetween(startTime, farthestTime)) {
-				float distanceOnRoad = (float) ((f.getTime() - level.getCurrPos()) / (farthestTime - startTime - 1));
+				float distanceOnRoad = (float) ((f.getTime() - level.getCurrPos()) / (farthestTime - startTime));
 				distanceOnRoad -= 1;
 				distanceOnRoad = -(-Math.abs(distanceOnRoad * distanceOnRoad * distanceOnRoad) - 1);
 				distanceOnRoad = 2 - (distanceOnRoad);
