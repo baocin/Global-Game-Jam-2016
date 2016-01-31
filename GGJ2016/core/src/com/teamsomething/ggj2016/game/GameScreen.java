@@ -204,7 +204,7 @@ public class GameScreen extends Game implements Screen {
 				if (f.getType() == FootstepType.LEFT) {
 					leftFactor = -1;
 				}
-				sprite.setCenter(WIDTH / 2 + (leftFactor * (WIDTH / 8) * (1 - distanceOnRoad)),
+				sprite.setCenter(WIDTH / 2 + (leftFactor * (WIDTH / 11) * (1 - distanceOnRoad)),
 						(distanceOnRoad * (HEIGHT / 2 + 100 - FOOTSTEP_LINE)) + FOOTSTEP_LINE);
 
 				sprite.draw(batch);
