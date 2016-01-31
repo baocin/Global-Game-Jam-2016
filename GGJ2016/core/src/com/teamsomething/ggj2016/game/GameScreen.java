@@ -135,7 +135,8 @@ public class GameScreen extends Game implements Screen {
 					72, 72);
 
 		}
-		batch.draw(stairTexture, 0, 0, WIDTH, HEIGHT);
+		batch.draw(stairTexture, 0, (float) -(level.getCurrPos() * 10), WIDTH, HEIGHT);
+		batch.draw
 		batch.draw(leftWallAnimation.getKeyFrame(elapsedTime, true), 0, 0, 225, HEIGHT);
 		batch.draw(rightWallAnimation.getKeyFrame(elapsedTime, true), WIDTH - 225, 0, 225, HEIGHT);
 		batch.end();

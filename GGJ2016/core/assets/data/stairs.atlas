@@ -1,0 +1,25 @@
+stairs.png
+format: RGBA8888
+filter: Nearest, Nearest
+repeat: none
+0001
+	rotate: false
+	xy: 0,0
+	size: 397, 422
+	orig: 0,0
+	offset: 0,0
+	index: -1
+0002
+	rotate: false
+	xy: 402,0
+	size: 394, 421
+	orig: 0,0
+	offset: 0, 0
+	index: -1
+0002
+	rotate: false
+	xy: 801,3
+	size: 401, 421
+	orig: 0,0
+	offset: 0, 0
+	index: -1
