@@ -49,7 +49,7 @@ public final class ScreenManager {
     
     private IntMap<com.badlogic.gdx.Screen> screens;
     
-    private ScreenManager() {
+    public ScreenManager() {
         screens = new IntMap<com.badlogic.gdx.Screen>();
     }
  

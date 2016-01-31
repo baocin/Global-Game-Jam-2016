@@ -1,5 +1,7 @@
 package com.teamsomething.ggj2016.game;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import com.badlogic.gdx.ApplicationAdapter;
@@ -19,7 +21,7 @@ import com.badlogic.gdx.utils.Pool;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.mygdx.game.ScreenManager;
-import com.badlogic.gdx.Game;
+import com.teamsomething.ggj2016.game.gamelogic.Level;
 
 public class CoreGame extends Game {
 	static int WIDTH;
@@ -29,25 +31,36 @@ public class CoreGame extends Game {
 	private Rectangle footprint;
 	private Texture leftFootprintTexture;
 	private Texture rightFootprintTexture;
-	
-	private int footSpacing = 80;
+	private Texture leftWall;
+	private Texture rightWall;
+	private ArrayList<Level> levels;
+	private int footSpacing = 65;
 	
     @Override
     public void create() {
-    	
-    	
+    	levels = new ArrayList<Level>();
+    	Level testLevel = new Level();
+    	try{
+    	testLevel.loadLevel("themeTest1.txt");
+    	}catch(IndexOutOfBoundsException e){
+    		System.out.println("Could not load music for the given theme file");
+    		Gdx.app.debug("CoreGame", "Could not load music for the given theme file");
+    	}
     	WIDTH = Gdx.graphics.getWidth();
     	HEIGHT = Gdx.graphics.getHeight();
     	
-    	cam = new OrthographicCamera(WIDTH, HEIGHT);
+//    	cam = new OrthographicCamera(WIDTH, HEIGHT);
 //    	cam.setToOrtho(false,WIDTH, HEIGHT);
-    	cam.translate(WIDTH/2, HEIGHT/2);
-    	cam.update();
+//    	cam.translate(WIDTH/2, HEIGHT/2);
+//    	cam.update();
     	
     	batch = new SpriteBatch();
     	
-    	rightFootprintTexture = new Texture(Gdx.files.internal("shoePrintPerspectiveSmall.png"));
+    	rightFootprintTexture = new Texture(Gdx.files.internal("rightShoePrintPerspectiveSmall.png"));
     	leftFootprintTexture = new Texture(Gdx.files.internal("leftShoePrintPerspectiveSmall.png"));
+    	rightWall = new Texture(Gdx.files.internal("rightWall.png"));
+    	leftWall = new Texture(Gdx.files.internal("leftWall.png"));
+    	
     	ScreenManager.getInstance().initialize(this);
         ScreenManager.getInstance().show(ScreenManager.Screens.GAME);
     }
@@ -63,14 +76,16 @@ public class CoreGame extends Game {
     	Gdx.gl.glClearColor(0, 0, 0.2f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         
-        cam.update();
+//        cam.update();
         
-        batch.setProjectionMatrix(cam.combined);
-        
+//        batch.setProjectionMatrix(cam.combined);
         
         batch.begin();
     		batch.draw(rightFootprintTexture, WIDTH/2+footSpacing-50, 0);
     		batch.draw(leftFootprintTexture, WIDTH/2-footSpacing-50, 0);
+    		batch.draw(rightWall, 0, 0, WIDTH, HEIGHT );
+    		batch.draw(leftWall, 0, 0, WIDTH, HEIGHT );
+    		batch.draw(new Texture(Gdx.files.internal("perspective2.png")), 0, 0, WIDTH, HEIGHT );
         batch.end();
     }
 
