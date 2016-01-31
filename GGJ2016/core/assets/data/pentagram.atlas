@@ -1,0 +1,53 @@
+pentagramSheet.png
+format: RGBA8888
+filter: Nearest, Nearest
+repeat: none
+0001
+	rotate: false
+	xy: 0,0
+	size: 144, 143
+	orig: 0,0
+	offset: 0,0
+	index: -1
+0002
+	rotate: false
+	xy: 143,0
+	size: 147, 141
+	orig: 0,0
+	offset: 0,0
+	index: -1
+0002
+	rotate: false
+	xy: 290,0
+	size: 144, 143
+	orig: 0,0
+	offset: 0,0
+	index: -1
+0003
+	rotate: false
+	xy: 435,0
+	size: 143, 142
+	orig: 0,0
+	offset: 0,0
+	index: -1
+0004
+	rotate: false
+	xy: 578	,0
+	size: 143, 142
+	orig: 0,0
+	offset: 0,0
+	index: -1
+0005
+	rotate: false
+	xy: 721,0
+	size: 143, 143
+	orig: 0,0
+	offset: 0,0
+	index: -1
+0006
+	rotate: false
+	xy: 864,0
+	size: 143, 143
+	orig: 0,0
+	offset: 0,0
+	index: -1
