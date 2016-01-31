@@ -224,6 +224,22 @@ public class Level {
 		}
 		return null;
 	}
-	
+
+	/**
+	 * 
+	 * @param startTime
+	 *            relative to current time
+	 * @param endTime
+	 * @return
+	 */
+	public LinkedList<Footstep> getFootstepsBetween(double startTime, double endTime) {
+		LinkedList<Footstep> results = new LinkedList<Footstep>();
+		for (Footstep footstep : footsteps) {
+			if ((footstep.getTime() < currPos + endTime) && (footstep.getTime() > currPos + startTime)) {
+				results.add(footstep);
+			}
+		}
+		return results;
+	}
 
 }
