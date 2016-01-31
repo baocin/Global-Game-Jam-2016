@@ -9,8 +9,10 @@ import com.badlogic.gdx.audio.Music.OnCompletionListener;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.teamsomething.ggj2016.game.gamelogic.Footstep;
@@ -33,14 +35,15 @@ public class GameScreen extends Game implements Screen {
 	private TextureAtlas rightWallTextureAtlas = new TextureAtlas(Gdx.files.internal("data/rightWall.atlas"));
 	private Animation leftWallAnimation;
 	private Animation rightWallAnimation;
-	 private float elapsedTime = 0;
+	private float elapsedTime = 0;
 	private Level level;
 	private int nextFootstep;
+	private Sprite footprintSpriteTest;
 
 	public GameScreen() {
-		leftWallAnimation = new Animation(1/15f, leftWallTextureAtlas.getRegions());
-		rightWallAnimation = new Animation(1/15f, rightWallTextureAtlas.getRegions());
-		
+		leftWallAnimation = new Animation(1 / 15f, leftWallTextureAtlas.getRegions());
+		rightWallAnimation = new Animation(1 / 15f, rightWallTextureAtlas.getRegions());
+
 		// batch = new SpriteBatch();
 		stage = new Stage();
 		// TODO Auto-generated constructor stub
@@ -54,10 +57,11 @@ public class GameScreen extends Game implements Screen {
 
 		rightFootprintTexture = new Texture(Gdx.files.internal("rightShoePrintPerspectiveSmall.png"));
 		leftFootprintTexture = new Texture(Gdx.files.internal("leftShoePrintPerspectiveSmall.png"));
-//		rightWall = new Texture(Gdx.files.internal("rightWall1.png"));
-//		leftWall = new Texture(Gdx.files.internal("leftWall1.png"));
+		// rightWall = new Texture(Gdx.files.internal("rightWall1.png"));
+		// leftWall = new Texture(Gdx.files.internal("leftWall1.png"));
 		perspectiveTexture = new Texture(Gdx.files.internal("perspective2.png"));
 
+		footprintSpriteTest = new Sprite(leftFootprintTexture);
 	}
 
 	@Override
@@ -89,23 +93,33 @@ public class GameScreen extends Game implements Screen {
 		Gdx.gl.glClearColor(0, 0, 0.2f, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+		// footprintSpriteTest.setPosition(WIDTH / 2, HEIGHT / 2);
+		footprintSpriteTest.setCenter(WIDTH / 2, HEIGHT / 2 - 40);
+		footprintSpriteTest.setScale(MathUtils.randomTriangular(0, 1, 0.75f));
+		footprintSpriteTest.setAlpha((float) (level.getCurrPos() - Math.floor(level.getCurrPos())));
+
 		batch.begin();
 		{
-			batch.draw(rightFootprintTexture, WIDTH / 2 + footSpacing - 50, 0);
-			batch.draw(leftFootprintTexture, WIDTH / 2 - footSpacing - 50, 0);
-//			batch.draw(rightWall, 0, 0, WIDTH, HEIGHT);
-//			batch.draw(leftWall, 0, 0, WIDTH, HEIGHT);
-			batch.draw(perspectiveTexture, 0, 0, WIDTH, HEIGHT);
+			footprintSpriteTest.draw(batch);
+			// batch.draw(rightFootprintTexture, WIDTH / 2 + footSpacing - 50,
+			// 0);
+			// batch.draw(leftFootprintTexture, WIDTH / 2 - footSpacing - 50,
+			// 0);
+			// batch.draw(rightWall, 0, 0, WIDTH, HEIGHT);
+			// batch.draw(leftWall, 0, 0, WIDTH, HEIGHT);
+			// batch.draw(perspectiveTexture, 0, 0, WIDTH, HEIGHT);
+
 		}
 		batch.end();
-		
+
 		batch.begin();
-	        //sprite.draw(batch);
-	        elapsedTime += Gdx.graphics.getDeltaTime();
-//	        batch.draw(), x, y, originX, originY, width, height, scaleX, scaleY, rotation);
-	        batch.draw(leftWallAnimation.getKeyFrame(elapsedTime, true), 0, 0, 225, HEIGHT);
-	        batch.draw(rightWallAnimation.getKeyFrame(elapsedTime, true), WIDTH-225, 0, 225, HEIGHT);
-        batch.end();
+		// sprite.draw(batch);
+		elapsedTime += Gdx.graphics.getDeltaTime();
+		// batch.draw(), x, y, originX, originY, width, height, scaleX, scaleY,
+		// rotation);
+		batch.draw(leftWallAnimation.getKeyFrame(elapsedTime, true), 0, 0, 225, HEIGHT);
+		batch.draw(rightWallAnimation.getKeyFrame(elapsedTime, true), WIDTH - 225, 0, 225, HEIGHT);
+		batch.end();
 
 		// Advance in level
 		level.addCurrPos(delta);
@@ -143,6 +157,31 @@ public class GameScreen extends Game implements Screen {
 				}
 			}
 		}
+
+		// Render visible footsteps
+		batch.begin();
+		{
+			double farthestTime = 4.0f;
+			for (Footstep f : level.getFootstepsBetween(0, farthestTime)) {
+				float distanceOnRoad = (float) ((f.getTime() - level.getCurrPos()) / farthestTime);
+				Sprite sprite = new Sprite(leftFootprintTexture);
+				// Flip for left foot
+				sprite.flip(f.getType() == FootstepType.RIGHT, false);
+				// Add a little bit to never get a log of zero issue
+				// sprite.setAlpha((float) Math.max(0,
+				// Math.min(1, (float) Math.log((f.getTime() -
+				// level.getCurrPos()) / farthestTime + 0.001f))));
+				float leftFactor = -1;
+				if (f.getType() == FootstepType.RIGHT) {
+					leftFactor = 1;
+				}
+				sprite.setCenter(WIDTH / 2 + (leftFactor * (WIDTH / 8) * (1 - distanceOnRoad)),
+						distanceOnRoad * (HEIGHT / 2 - 40));
+
+				sprite.draw(batch);
+			}
+		}
+		batch.end();
 	}
 
 	@Override
@@ -174,7 +213,7 @@ public class GameScreen extends Game implements Screen {
 		batch.dispose();
 		leftWallTextureAtlas.dispose();
 		rightWallTextureAtlas.dispose();
-		
+
 		// batch.dispose();
 		// texture.dispose();
 
