@@ -7,7 +7,7 @@ package com.teamsomething.ggj2016.game.gamelogic;
  * @author
  *
  */
-public class Footstep {
+public class Footstep implements Comparable<Footstep> {
 	@Override
 	public String toString() {
 		return "Footstep [type=" + type + ", time=" + time + ", didMiss=" + didMiss + "]";
@@ -45,5 +45,16 @@ public class Footstep {
 		super();
 		this.type = type;
 		this.time = time;
+	}
+
+	@Override
+	public int compareTo(Footstep o) {
+		if (o.time < time) {
+			return -1;
+		} else if (o.time > time) {
+			return 1;
+		} else {
+			return 0;
+		}
 	}
 }

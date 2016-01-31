@@ -2,13 +2,12 @@ package com.teamsomething.ggj2016.game.gamelogic;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.LinkedList;
 
 import com.badlogic.gdx.Files.FileType;
-import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.utils.Logger;
+import com.badlogic.gdx.math.MathUtils;
 
 public class Level {
 	/**
@@ -168,12 +167,42 @@ public class Level {
 
 		Gdx.app.debug(LOAD_LEVEL_TAG, level.footsteps.toString());
 
+		Gdx.app.debug(LOAD_LEVEL_TAG, "Chosen segments: " + chosenSegments.toString());
+
 		// Queue up music files according to segment order
 		for (Integer segment : chosenSegments) {
-			level.musicFiles.add(segmentMusicFilenames.get(segment - 1));
+			Gdx.app.debug(LOAD_LEVEL_TAG, Integer.toString(segment));
+			level.musicFiles.add(segmentMusicFilenames.get(segment));
 		}
 
+		// Sort the footsteps in the level
+		Collections.sort(level.footsteps);
+
 		return level;
+	}
+
+	public double getCurrPos() {
+		return currPos;
+	}
+
+	public void setCurrPos(double currPos) {
+		this.currPos = currPos;
+	}
+
+	public LinkedList<Footstep> getFootsteps() {
+		return footsteps;
+	}
+
+	public void setFootsteps(LinkedList<Footstep> footsteps) {
+		this.footsteps = footsteps;
+	}
+
+	public LinkedList<String> getMusicFiles() {
+		return musicFiles;
+	}
+
+	public void setMusicFiles(LinkedList<String> musicFiles) {
+		this.musicFiles = musicFiles;
 	}
 
 }
