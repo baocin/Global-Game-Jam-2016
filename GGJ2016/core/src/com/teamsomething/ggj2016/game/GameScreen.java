@@ -225,9 +225,15 @@ public class GameScreen extends Game implements Screen {
 				if (f.getType() == FootstepType.LEFT) {
 					leftFactor = -1;
 				}
-				sprite.setCenter(WIDTH / 2 + (leftFactor * (WIDTH / 11) * (1 - distanceOnRoad)),
-						(distanceOnRoad * (HEIGHT / 2 + 50 - FOOTSTEP_LINE)) + FOOTSTEP_LINE);
+				float x = WIDTH / 2 + (leftFactor * (WIDTH / 11) * (1 - distanceOnRoad));
+				float y = (distanceOnRoad * (HEIGHT / 2 + 50 - FOOTSTEP_LINE)) + FOOTSTEP_LINE;
 
+				// Celebrate hits!
+				if (f.isDidHit()) {
+					y += -distanceTo * 100; 
+				}
+
+				sprite.setCenter(x, y);
 				sprite.draw(batch);
 			}
 		}
