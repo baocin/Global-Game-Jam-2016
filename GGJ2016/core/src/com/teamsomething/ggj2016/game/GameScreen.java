@@ -38,7 +38,6 @@ public class GameScreen extends Game implements Screen {
 	private float elapsedTime = 0;
 	private Level level;
 	private int nextFootstep;
-	private Sprite footprintSpriteTest;
 
 	public GameScreen() {
 		leftWallAnimation = new Animation(1 / 15f, leftWallTextureAtlas.getRegions());
@@ -61,7 +60,6 @@ public class GameScreen extends Game implements Screen {
 		// leftWall = new Texture(Gdx.files.internal("leftWall1.png"));
 		perspectiveTexture = new Texture(Gdx.files.internal("perspective2.png"));
 
-		footprintSpriteTest = new Sprite(leftFootprintTexture);
 	}
 
 	@Override
@@ -93,14 +91,8 @@ public class GameScreen extends Game implements Screen {
 		Gdx.gl.glClearColor(0, 0, 0.2f, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-		// footprintSpriteTest.setPosition(WIDTH / 2, HEIGHT / 2);
-		footprintSpriteTest.setCenter(WIDTH / 2, HEIGHT / 2 - 40);
-		footprintSpriteTest.setScale(MathUtils.randomTriangular(0, 1, 0.75f));
-		footprintSpriteTest.setAlpha((float) (level.getCurrPos() - Math.floor(level.getCurrPos())));
-
 		batch.begin();
 		{
-			footprintSpriteTest.draw(batch);
 			// batch.draw(rightFootprintTexture, WIDTH / 2 + footSpacing - 50,
 			// 0);
 			// batch.draw(leftFootprintTexture, WIDTH / 2 - footSpacing - 50,
@@ -164,6 +156,9 @@ public class GameScreen extends Game implements Screen {
 			double farthestTime = 4.0f;
 			for (Footstep f : level.getFootstepsBetween(0, farthestTime)) {
 				float distanceOnRoad = (float) ((f.getTime() - level.getCurrPos()) / farthestTime);
+				distanceOnRoad -= 1;
+				distanceOnRoad = -(-Math.abs(distanceOnRoad * distanceOnRoad) - 1);
+				distanceOnRoad = 2 - (distanceOnRoad);
 				Sprite sprite = new Sprite(leftFootprintTexture);
 				// Flip for left foot
 				sprite.flip(f.getType() == FootstepType.RIGHT, false);
@@ -175,7 +170,7 @@ public class GameScreen extends Game implements Screen {
 				if (f.getType() == FootstepType.RIGHT) {
 					leftFactor = 1;
 				}
-				sprite.setCenter(WIDTH / 2 + (leftFactor * (WIDTH / 8) * (1 - distanceOnRoad)),
+				sprite.setCenter(WIDTH / 2 + (leftFactor * (WIDTH / 7) * (1 - distanceOnRoad)),
 						distanceOnRoad * (HEIGHT / 2 - 40));
 
 				sprite.draw(batch);
