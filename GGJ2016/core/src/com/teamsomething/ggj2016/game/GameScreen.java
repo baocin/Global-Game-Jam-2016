@@ -6,6 +6,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Music.OnCompletionListener;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -29,7 +30,8 @@ public class GameScreen extends Game implements Screen {
 	private Texture leftWall;
 	private Texture rightWall;
 	private Texture perspectiveTexture;
-	private double HIT_THRESHOLD = 0.2;
+	private double HIT_THRESHOLD = 0.6;
+	private double LIT_THRESHOLD = 0.2;
 	private int footSpacing = 65;
 	private TextureAtlas leftWallTextureAtlas = new TextureAtlas(Gdx.files.internal("data/leftWall.atlas"));
 	private TextureAtlas rightWallTextureAtlas = new TextureAtlas(Gdx.files.internal("data/rightWall.atlas"));
@@ -117,10 +119,9 @@ public class GameScreen extends Game implements Screen {
 		batch.end();
 
 		// Advance in level
-		//level.addCurrPos(delta);
-		//TODO:
+		// level.addCurrPos(delta);
+		// TODO:
 		level.syncWithMusic(music);
-		
 
 		// Announce next footstep, if one has been passed
 		if (level.getFootsteps().get(nextFootstep).getTime() < level.getCurrPos()) {
@@ -159,8 +160,8 @@ public class GameScreen extends Game implements Screen {
 		// Render visible footsteps
 		batch.begin();
 		{
-			double farthestTime = 8.0f;
-			for (Footstep f : level.getFootstepsBetween(0, farthestTime)) {
+			double farthestTime = 12.0f;
+			for (Footstep f : level.getFootstepsBetween(-2, farthestTime)) {
 				float distanceOnRoad = (float) ((f.getTime() - level.getCurrPos()) / farthestTime);
 				distanceOnRoad -= 1;
 				distanceOnRoad = -(-Math.abs(distanceOnRoad * distanceOnRoad * distanceOnRoad) - 1);
@@ -169,15 +170,30 @@ public class GameScreen extends Game implements Screen {
 				// Flip for left foot
 				sprite.flip(f.getType() == FootstepType.LEFT, false);
 				// Add alpha
-				sprite.setAlpha((1f - distanceOnRoad) * 0.9f + 0.1f);
+				if (distanceOnRoad > 0) {
+					sprite.setAlpha((1f - distanceOnRoad) * 0.9f + 0.1f);
+				}
 				// Add scaling
 				sprite.setScale((1f - distanceOnRoad) * 0.6f);
+				// Light footsteps that are "active"
+				double distanceTo = f.getTime() - level.getCurrPos();
+				if (Math.abs(distanceTo) < LIT_THRESHOLD) {
+					sprite.setColor(Color.BLUE);
+				}
+
+				// Mark hits or misses
+				if (f.isDidHit()) {
+					sprite.setColor(Color.GREEN);
+				} else if (f.isDidMiss()) {
+					sprite.setColor(Color.RED);
+				}
+
 				float leftFactor = 1;
 				if (f.getType() == FootstepType.LEFT) {
 					leftFactor = -1;
 				}
 				sprite.setCenter(WIDTH / 2 + (leftFactor * (WIDTH / 8) * (1 - distanceOnRoad)),
-						distanceOnRoad * (HEIGHT / 2 - 50) + FOOTSTEP_LINE);
+						distanceOnRoad * (HEIGHT / 2 + 100) + FOOTSTEP_LINE);
 
 				sprite.draw(batch);
 			}
