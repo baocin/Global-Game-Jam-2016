@@ -36,6 +36,7 @@ public class GameScreen extends Game implements Screen {
 	 private float elapsedTime = 0;
 	private Level level;
 	private int nextFootstep;
+	private Texture stairs = new Texture(Gdx.files.internal("stairs.png"));
 
 	public GameScreen() {
 		leftWallAnimation = new Animation(1/15f, leftWallTextureAtlas.getRegions());
@@ -95,7 +96,8 @@ public class GameScreen extends Game implements Screen {
 			batch.draw(leftFootprintTexture, WIDTH / 2 - footSpacing - 50, 0);
 //			batch.draw(rightWall, 0, 0, WIDTH, HEIGHT);
 //			batch.draw(leftWall, 0, 0, WIDTH, HEIGHT);
-			batch.draw(perspectiveTexture, 0, 0, WIDTH, HEIGHT);
+			batch.draw(stairs , 0, 0, WIDTH, HEIGHT);
+			batch.draw(perspectiveTexture, 0, 0, WIDTH/2, 0, WIDTH, HEIGHT/4, 1, 0, true, true);
 		}
 		batch.end();
 		
