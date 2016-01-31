@@ -1,28 +1,62 @@
 package com.teamsomething.ggj2016.game;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Music.OnCompletionListener;
+import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.teamsomething.ggj2016.game.gamelogic.Footstep;
 import com.teamsomething.ggj2016.game.gamelogic.FootstepType;
 import com.teamsomething.ggj2016.game.gamelogic.Level;
 
-public class GameScreen implements Screen {
-	private Stage stage = new Stage();
-
+public class GameScreen extends Game implements Screen {
+	private Stage stage;
+	static int WIDTH;
+	static int HEIGHT;
+	private SpriteBatch batch;
+	private Texture leftFootprintTexture;
+	private Texture rightFootprintTexture;
+	private Texture leftWall;
+	private Texture rightWall;
+	private Texture perspectiveTexture;
+	private double HIT_THRESHOLD = 0.2;
+	private int footSpacing = 65;
+	private TextureAtlas leftWallTextureAtlas = new TextureAtlas(Gdx.files.internal("data/leftWall.atlas"));
+	private TextureAtlas rightWallTextureAtlas = new TextureAtlas(Gdx.files.internal("data/rightWall.atlas"));
+	private Animation leftWallAnimation;
+	private Animation rightWallAnimation;
+	 private float elapsedTime = 0;
 	private Level level;
 	private int nextFootstep;
 
 	public GameScreen() {
+		leftWallAnimation = new Animation(1/15f, leftWallTextureAtlas.getRegions());
+		rightWallAnimation = new Animation(1/15f, rightWallTextureAtlas.getRegions());
+		
 		// batch = new SpriteBatch();
-
+		stage = new Stage();
 		// TODO Auto-generated constructor stub
-		stage = new Stage(new StretchViewport(CoreGame.WIDTH, CoreGame.HEIGHT));
+		stage = new Stage(new StretchViewport(WIDTH, HEIGHT));
 		Gdx.input.setInputProcessor(stage);
+
+		WIDTH = Gdx.graphics.getWidth();
+		HEIGHT = Gdx.graphics.getHeight();
+
+		batch = new SpriteBatch();
+
+		rightFootprintTexture = new Texture(Gdx.files.internal("rightShoePrintPerspectiveSmall.png"));
+		leftFootprintTexture = new Texture(Gdx.files.internal("leftShoePrintPerspectiveSmall.png"));
+//		rightWall = new Texture(Gdx.files.internal("rightWall1.png"));
+//		leftWall = new Texture(Gdx.files.internal("leftWall1.png"));
+		perspectiveTexture = new Texture(Gdx.files.internal("perspective2.png"));
 
 	}
 
@@ -48,17 +82,30 @@ public class GameScreen implements Screen {
 		});
 	}
 
-	private double HIT_THRESHOLD = 0.2;
-
 	@Override
 	public void render(float delta) {
-		// if(Gdx.input.isKeyPressed(Input.Keys.UP)){
-		// hallActor.sprite.translateY(10.0f);
-		// }
-		// if(Gdx.input.isKeyPressed(Input.Keys.DOWN)){
-		// hallActor.sprite.translateY(-10.0f);
-		//
-		// }
+		super.render();
+
+		Gdx.gl.glClearColor(0, 0, 0.2f, 1);
+		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+		batch.begin();
+		{
+			batch.draw(rightFootprintTexture, WIDTH / 2 + footSpacing - 50, 0);
+			batch.draw(leftFootprintTexture, WIDTH / 2 - footSpacing - 50, 0);
+//			batch.draw(rightWall, 0, 0, WIDTH, HEIGHT);
+//			batch.draw(leftWall, 0, 0, WIDTH, HEIGHT);
+			batch.draw(perspectiveTexture, 0, 0, WIDTH, HEIGHT);
+		}
+		batch.end();
+		
+		batch.begin();
+	        //sprite.draw(batch);
+	        elapsedTime += Gdx.graphics.getDeltaTime();
+//	        batch.draw(), x, y, originX, originY, width, height, scaleX, scaleY, rotation);
+	        batch.draw(leftWallAnimation.getKeyFrame(elapsedTime, true), 0, 0, 225, HEIGHT);
+	        batch.draw(rightWallAnimation.getKeyFrame(elapsedTime, true), WIDTH-225, 0, 225, HEIGHT);
+        batch.end();
 
 		// Advance in level
 		level.addCurrPos(delta);
@@ -124,9 +171,18 @@ public class GameScreen implements Screen {
 
 	@Override
 	public void dispose() {
-
+		batch.dispose();
+		leftWallTextureAtlas.dispose();
+		rightWallTextureAtlas.dispose();
+		
 		// batch.dispose();
 		// texture.dispose();
+
+	}
+
+	@Override
+	public void create() {
+		// TODO Auto-generated method stub
 
 	}
 

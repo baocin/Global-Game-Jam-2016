@@ -1,0 +1,26 @@
+wallSpriteSheet.png
+format: RGBA8888
+filter: Nearest, Nearest
+repeat: none
+0001
+	rotate: false
+	xy: 1980,0
+	size: 675, 2000
+	orig: 3966, 2000
+	offset: 0,0
+	index: -1
+0002
+	rotate: false
+	xy: 2667,0
+	size: 633, 2000
+	orig: 3966, 2000
+	offset: 0, 0
+	index: -1
+0002
+	rotate: false
+	xy: 3314,0
+	size: 660, 2000
+	orig: 3966, 2000
+	offset: 0, 0
+	index: -1
+	
